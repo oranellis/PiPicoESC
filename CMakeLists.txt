@@ -12,7 +12,7 @@ project(PiPicoESC)
 pico_sdk_init()
 
 add_executable(controller
-    src/controller.cpp
+    src/controller.c
 )
 
 # Add pico_stdlib library which aggregates commonly used features
