@@ -19,4 +19,6 @@ double vCommand;
 
 // The stator voltages a, b, and c; terminal voltage
 
+
+
 }
