@@ -38,9 +38,9 @@ void powerLoop() {
         phaseA = fastsin[phaseAPos1024];
         phaseB = fastsin[phaseBPos1024];
         phaseC = fastsin[phaseCPos1024];
-        pwm_set_chan_level(slice_num_0, channel_0, (phaseA + 32768));
-        pwm_set_chan_level(slice_num_1, channel_1, (phaseB + 32768));
-        pwm_set_chan_level(slice_num_2, channel_2, (phaseC + 32768));
+        pwm_set_chan_level(slice_num_0, channel_0, phaseA);
+        pwm_set_chan_level(slice_num_1, channel_1, phaseB);
+        pwm_set_chan_level(slice_num_2, channel_2, phaseC);
         if (counter > 10000) {
             counter = 0;
             timenow = time_us_64();

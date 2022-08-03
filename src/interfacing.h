@@ -41,9 +41,9 @@ int iosetup() {
     channel_2 = pwm_gpio_to_channel(output2);
 
 
-    pwm_set_wrap(slice_num_0, 65535);
-    pwm_set_wrap(slice_num_1, 65535);
-    pwm_set_wrap(slice_num_2, 65535);
+    pwm_set_wrap(slice_num_0, 8191);
+    pwm_set_wrap(slice_num_1, 8191);
+    pwm_set_wrap(slice_num_2, 8191);
 
     // initialise all to 0 volts
     pwm_set_chan_level(slice_num_0, channel_0, 0);
