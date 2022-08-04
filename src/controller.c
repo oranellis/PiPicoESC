@@ -1,4 +1,5 @@
 #include "controllerMaths.h"
+#include "hardware/gpio.h"
 #include "hardware/timer.h"
 #include "interfacing.h"
 #include "enums.h"
@@ -10,43 +11,81 @@
 #include "hardware/pwm.h"
 
 volatile int throttle = 1; // Between 0 and 32767
-volatile int fieldSpinSpeed = 2048; //256*revs per second
 volatile enum states state = s_power;
 
-volatile long prevLoopTimestamp;
-volatile long phaseTime = 0; //time in us through the phase rotation
-volatile long timediff = 0;
-volatile int phaseA, phaseB, phaseC;
+volatile int phaseALevelRaw, phaseBLevelRaw, phaseCLevelRaw;
+volatile int phaseALevel, phaseBLevel, phaseCLevel;
 volatile int phaseAPos1024, phaseBPos1024, phaseCPos1024;
 volatile int counter = 0;
 volatile long countertime = 0;
 volatile long timenow = 0;
-volatile int targetFieldRps = 10;
-const int phaseSteps = 4;
-const int phaseRes = 1024/phaseSteps;
+volatile double targetFieldRps = 0.1;
+const int phaseSteps = 1; // Can be a multiple of 2 up to 512
+const int phaseRes = 1536/phaseSteps;
 
 
 void powerLoop() {
     phaseAPos1024 = 0;
-    phaseBPos1024 = 683;
-    phaseCPos1024 = 384;
+    phaseBPos1024 = 512;
+    phaseCPos1024 = 1024;
     while (1) {
-        prevLoopTimestamp = time_us_64();
-        phaseAPos1024 = (phaseAPos1024 + phaseSteps) % 1024;
-        phaseBPos1024 = (phaseBPos1024 + phaseSteps) % 1024;
-        phaseCPos1024 = (phaseCPos1024 + phaseSteps) % 1024;
-        phaseA = fastsin[phaseAPos1024];
-        phaseB = fastsin[phaseBPos1024];
-        phaseC = fastsin[phaseCPos1024];
-        pwm_set_chan_level(slice_num_0, channel_0, phaseA);
-        pwm_set_chan_level(slice_num_1, channel_1, phaseB);
-        pwm_set_chan_level(slice_num_2, channel_2, phaseC);
-        if (counter > 10000) {
+        phaseAPos1024 = (phaseAPos1024 + phaseSteps) % 1536;
+        phaseBPos1024 = (phaseBPos1024 + phaseSteps) % 1536;
+        phaseCPos1024 = (phaseCPos1024 + phaseSteps) % 1536;
+
+        phaseALevelRaw= fastsin[phaseAPos1024];
+        phaseBLevelRaw = fastsin[phaseBPos1024];
+        phaseCLevelRaw = fastsin[phaseCPos1024];
+
+        if (phaseALevelRaw <= phaseBLevelRaw && phaseALevelRaw <= phaseCLevelRaw) {
+            phaseALevel = 0;
+            phaseBLevel = phaseBLevelRaw - phaseALevelRaw;
+            phaseCLevel = phaseCLevelRaw - phaseALevelRaw;
+        }
+        else if (phaseBLevelRaw <= phaseCLevelRaw && phaseBLevelRaw <= phaseALevelRaw) {
+            phaseALevel = phaseALevelRaw - phaseBLevelRaw;
+            phaseBLevel = 0;
+            phaseCLevel = phaseCLevelRaw - phaseBLevelRaw;
+        }
+        else {
+            phaseALevel = phaseALevelRaw - phaseCLevelRaw;
+            phaseBLevel = phaseBLevelRaw - phaseCLevelRaw;
+            phaseCLevel = 0;
+        }
+
+        if (phaseALevel == 0) {
+            gpio_put(outputALow, 1);
+        }
+        else {
+            gpio_put(outputALow, 0);
+        }
+
+        if (phaseBLevel == 0) {
+            gpio_put(outputBLow, 1);
+        }
+        else {
+            gpio_put(outputBLow, 0);
+        }
+
+        if (phaseCLevel == 0) {
+            gpio_put(outputCLow, 1);
+        }
+        else {
+            gpio_put(outputALow, 0);
+        }
+
+        pwm_set_chan_level(slice_num_0, channel_0, phaseALevel);
+        pwm_set_chan_level(slice_num_1, channel_1, phaseBLevel);
+        pwm_set_chan_level(slice_num_2, channel_2, phaseCLevel);
+
+
+        if (counter > 1000) {
             counter = 0;
             timenow = time_us_64();
-            printf("dif: %li\n",timenow-countertime);
+            printf("a: %i b: %i c: %i    a: %i b: %i c: %i    time: %li \n", phaseALevel, phaseBLevel, phaseCLevel, phaseALevelRaw, phaseBLevelRaw, phaseCLevelRaw, timenow-countertime);
             countertime = timenow;
         }
+
         else {
             counter++;
         }
@@ -89,16 +128,13 @@ void faultLoop() {
 int main() {
 
     // =================== Interfacing setup ===================
-    // if (iosetup() != 0) {
-        // printf("eFailed to initialise IO");
-        // return 1;
-    // }
+    if (iosetup() != 0) {
+        printf("eFailed to initialise IO");
+        return 1;
+    }
     iosetup();
 
-    // =================== Global variables ===================
-    // Motor state variables
-
-    // Main event loop
+    // =================== Main Event Loop ===================
 
     while (1) {
         switch (state) {
