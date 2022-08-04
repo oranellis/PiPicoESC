@@ -1,4 +1,4 @@
-#include "controllerMaths.h"
+#include "controller_maths.h"
 #include "hardware/gpio.h"
 #include "hardware/timer.h"
 #include "interfacing.h"
@@ -10,87 +10,52 @@
 #include "pico/time.h"
 #include "hardware/pwm.h"
 
-volatile int throttle = 1; // Between 0 and 32767
-volatile enum states state = s_power;
+volatile double v_command = 1; // Between 0 and 32767
+volatile enum states state = s_power; // set to power for testing
 
-volatile int phaseALevelRaw, phaseBLevelRaw, phaseCLevelRaw;
-volatile int phaseALevel, phaseBLevel, phaseCLevel;
-volatile int phaseAPos1024, phaseBPos1024, phaseCPos1024;
-volatile int counter = 0;
-volatile long countertime = 0;
-volatile long timenow = 0;
-volatile double targetFieldRps = 0.1;
-const int phaseSteps = 1; // Can be a multiple of 2 up to 512
-const int phaseRes = 1536/phaseSteps;
+volatile double field_rps_command = 1;
+const int phase_steps = 1; // Can be a multiple of 2 up to 512
+const int phase_res = 1536/phase_steps;
 
 
-void powerLoop() {
-    phaseAPos1024 = 0;
-    phaseBPos1024 = 512;
-    phaseCPos1024 = 1024;
+void PowerLoop() {
+    volatile int phase_a_level_raw, phase_b_level_raw, phase_c_level_raw;
+    volatile int phase_a_level, phase_b_level, phase_c_level;
+    volatile int phase_a_pos = 0, phase_b_pos = 512, phase_c_pos = 1024; // the phase angle of each output, 120deg out of phase with each other
+    volatile int counter = 0; // For debugging
+    volatile long timeold = time_us_64(), timenow = timeold; // For debugging
+
+    // This while loop can be moved to the second core and this core can manage the field speed and voltage based on throttle and current motor rps
     while (1) {
-        phaseAPos1024 = (phaseAPos1024 + phaseSteps) % 1536;
-        phaseBPos1024 = (phaseBPos1024 + phaseSteps) % 1536;
-        phaseCPos1024 = (phaseCPos1024 + phaseSteps) % 1536;
+        phase_a_pos = (phase_a_pos + phase_steps) % 1536;
+        phase_b_pos = (phase_b_pos + phase_steps) % 1536;
+        phase_c_pos = (phase_c_pos + phase_steps) % 1536;
 
-        phaseALevelRaw= fastsin[phaseAPos1024];
-        phaseBLevelRaw = fastsin[phaseBPos1024];
-        phaseCLevelRaw = fastsin[phaseCPos1024];
+        phase_a_level_raw = fastsin[phase_a_pos];
+        phase_b_level_raw = fastsin[phase_b_pos];
+        phase_c_level_raw = fastsin[phase_c_pos];
 
-        if (phaseALevelRaw <= phaseBLevelRaw && phaseALevelRaw <= phaseCLevelRaw) {
-            phaseALevel = 0;
-            phaseBLevel = phaseBLevelRaw - phaseALevelRaw;
-            phaseCLevel = phaseCLevelRaw - phaseALevelRaw;
-        }
-        else if (phaseBLevelRaw <= phaseCLevelRaw && phaseBLevelRaw <= phaseALevelRaw) {
-            phaseALevel = phaseALevelRaw - phaseBLevelRaw;
-            phaseBLevel = 0;
-            phaseCLevel = phaseCLevelRaw - phaseBLevelRaw;
-        }
-        else {
-            phaseALevel = phaseALevelRaw - phaseCLevelRaw;
-            phaseBLevel = phaseBLevelRaw - phaseCLevelRaw;
-            phaseCLevel = 0;
-        }
+        phase_a_level = phase_a_level_raw * v_command;
+        phase_b_level = phase_b_level_raw * v_command;
+        phase_c_level = phase_c_level_raw * v_command;
 
-        if (phaseALevel == 0) {
-            gpio_put(outputALow, 1);
-        }
-        else {
-            gpio_put(outputALow, 0);
-        }
-
-        if (phaseBLevel == 0) {
-            gpio_put(outputBLow, 1);
-        }
-        else {
-            gpio_put(outputBLow, 0);
-        }
-
-        if (phaseCLevel == 0) {
-            gpio_put(outputCLow, 1);
-        }
-        else {
-            gpio_put(outputALow, 0);
-        }
-
-        pwm_set_chan_level(slice_num_0, channel_0, phaseALevel);
-        pwm_set_chan_level(slice_num_1, channel_1, phaseBLevel);
-        pwm_set_chan_level(slice_num_2, channel_2, phaseCLevel);
-
+        PwmALevel(phase_a_level);
+        PwmBLevel(phase_b_level);
+        PwmCLevel(phase_c_level);
 
         if (counter > 1000) {
             counter = 0;
             timenow = time_us_64();
-            printf("a: %i b: %i c: %i    a: %i b: %i c: %i    time: %li \n", phaseALevel, phaseBLevel, phaseCLevel, phaseALevelRaw, phaseBLevelRaw, phaseCLevelRaw, timenow-countertime);
-            countertime = timenow;
+            printf("a: %i b: %i c: %i    a: %i b: %i c: %i    time: %li \n", phase_a_level, phase_b_level, phase_c_level, phase_a_level_raw, phase_b_level_raw, phase_c_level_raw, timenow-timeold);
+            timeold = timenow;
         }
 
         else {
             counter++;
         }
 
-        if (throttle <= 0) {
+        if (v_command <= 0) {
+        PwmALevel(phase_a_level);
             state = s_idle;
             break;
         }
@@ -99,16 +64,16 @@ void powerLoop() {
             break;
         }
 
-        sleep_us((1000000/(targetFieldRps*phaseRes)));
+        sleep_us((1000000/(field_rps_command*phase_res)));
     }
 }
 
 
-void regenLoop() {
+void RegenLoop() {
     while (1) {
         state = s_fault;
 
-        if (throttle >= 0) {
+        if (v_command >= 0) {
             state = s_idle;
         }
 
@@ -119,7 +84,7 @@ void regenLoop() {
 }
 
 
-void faultLoop() {
+void FaultLoop() {
 }
 
 
@@ -128,23 +93,22 @@ void faultLoop() {
 int main() {
 
     // =================== Interfacing setup ===================
-    if (iosetup() != 0) {
+    if (IoSetup() != 0) {
         printf("eFailed to initialise IO");
         return 1;
     }
-    iosetup();
 
     // =================== Main Event Loop ===================
 
     while (1) {
         switch (state) {
-            // case s_fault: faultLoop(); break;
-            // case s_init: init(); break;
-            // case s_idle: idleLoop(); break;
-            // case s_ready: readyLoop(); break;
-            case s_power: powerLoop(); break;
-            // case s_regen: regenLoop(); break;
-           default: faultLoop(); break;
+            // case s_fault: FaultLoop(); break;
+            // case s_init: Init(); break;
+            // case s_idle: IdleLoop(); break;
+            // case s_ready: ReadyLoop(); break;
+            case s_power: PowerLoop(); break;
+            // case s_regen: RegenLoop(); break;
+           default: FaultLoop(); break;
         }
     }
 
