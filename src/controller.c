@@ -1,19 +1,16 @@
 #include "controller_maths.h"
-#include "hardware/gpio.h"
-#include "hardware/timer.h"
 #include "interfacing.h"
 #include "enums.h"
 
-#include <stdint.h>
-#include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/time.h"
-#include "hardware/pwm.h"
+
+#include <stdio.h>
 
 volatile double v_command = 1; // Between 0 and 32767
 volatile enum states state = s_power; // set to power for testing
 
-volatile double field_rps_command = 1;
+volatile double field_rps_command = 8;
 const int phase_steps = 1; // Can be a multiple of 2 up to 512
 const int phase_res = 1536/phase_steps;
 
@@ -42,17 +39,6 @@ void PowerLoop() {
         PwmALevel(phase_a_level);
         PwmBLevel(phase_b_level);
         PwmCLevel(phase_c_level);
-
-        if (counter > 1000) {
-            counter = 0;
-            timenow = time_us_64();
-            printf("a: %i b: %i c: %i    a: %i b: %i c: %i    time: %li \n", phase_a_level, phase_b_level, phase_c_level, phase_a_level_raw, phase_b_level_raw, phase_c_level_raw, timenow-timeold);
-            timeold = timenow;
-        }
-
-        else {
-            counter++;
-        }
 
         if (v_command <= 0) {
         PwmALevel(phase_a_level);
