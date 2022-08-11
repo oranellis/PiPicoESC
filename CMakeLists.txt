@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.13)
 set(PICO_SDK_PATH $ENV{SDK_PATH}/pico-sdk)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 include(pico_sdk_import.cmake)
 
 project(PiPicoESC)
@@ -10,7 +13,8 @@ project(PiPicoESC)
 pico_sdk_init()
 
 add_executable(controller
-    src/controller.c
+    src/controller.cpp
+    src/states.cpp
 )
 
 target_link_libraries(controller pico_stdlib hardware_gpio hardware_pwm)

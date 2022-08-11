@@ -1,3 +1,16 @@
+//  ____  _ ____  _           _____ ____   ____
+// |  _ \(_)  _ \(_) ___ ___ | ____/ ___| / ___|
+// | |_) | | |_) | |/ __/ _ \|  _| \___ \| |
+// |  __/| |  __/| | (_| (_) | |___ ___) | |___
+// |_|   |_|_|   |_|\___\___/|_____|____/ \____|
+//
+// ==== controller_maths.h ====
+//
+// Additional maths related functions and constants
+//
+// authored by: Oran Ellis, Karl Hartmann
+// licence: GPLv3
+
 #define N_POLES 2
 #define V_S_FALLBACK 400
 
