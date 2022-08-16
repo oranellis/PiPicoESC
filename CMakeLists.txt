@@ -1,3 +1,14 @@
+#  ____  _ ____  _           _____ ____   ____
+# |  _ \(_)  _ \(_) ___ ___ | ____/ ___| / ___|
+# | |_) | | |_) | |/ __/ _ \|  _| \___ \| |
+# |  __/| |  __/| | (_| (_) | |___ ___) | |___
+# |_|   |_|_|   |_|\___\___/|_____|____/ \____|
+#
+# ==== CMakeLists.txt ====
+#
+# Authors: Oran Ellis, Karl Hartmann
+# Licence: GPLv3
+
 cmake_minimum_required(VERSION 3.13)
 
 set(PICO_SDK_PATH $ENV{SDK_PATH}/pico-sdk)

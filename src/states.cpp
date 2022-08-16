@@ -8,8 +8,8 @@
 //
 // Source file for drive state specific functions
 //
-// authored by: Oran Ellis, Karl Hartmann
-// licence: GPLv3
+// Authors: Oran Ellis, Karl Hartmann
+// Licence: GPLv3
 
 #include "interfacing.h"
 #include "states.h"

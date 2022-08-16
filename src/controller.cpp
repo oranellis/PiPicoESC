@@ -8,8 +8,8 @@
 //
 // Main script containing the logic to drive an induction motor
 //
-// authored by: Oran Ellis, Karl Hartmann
-// licence: GPLv3
+// Authors: Oran Ellis, Karl Hartmann
+// Licence: GPLv3
 
 #include "pico/stdio.h"
 #include "pico/time.h"
@@ -25,7 +25,7 @@ int main() {
     // =================== Interfacing setup ===================
     Interface i;
     Interface * interface = &i;
-    
+
     States state = States::kPower; // The current controller state
 
     // =================== Main Event Loop ===================
