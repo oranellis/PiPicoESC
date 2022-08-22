@@ -26,20 +26,21 @@ int main() {
     Interface i;
     Interface * interface = &i;
 
-    States state = States::kPower; // The current controller state
+    States s = States::kPower; // The current controller state
+    States * state = &s;
 
     // =================== Main Event Loop ===================
 
     while (1) {
-        switch (state) {
-            case States::kFault: FaultLoop(); break;
-            case States::kInit: Init(); break;
-            case States::kIdle: IdleLoop(); break;
-            case States::kReady: ReadyLoop(); break;
-            case States::kPower: PowerLoop(interface); break;
-            case States::kRegen: RegenLoop(); break;
-            case States::kCharging: ChargingLoop(); break;
-            default: FaultLoop(); break;
+        switch (*state) {
+            case States::kFault: FaultLoop(interface, state); break;
+            case States::kInit: Init(interface, state); break;
+            case States::kIdle: IdleLoop(interface, state); break;
+            case States::kReady: ReadyLoop(interface, state); break;
+            case States::kPower: PowerLoop(interface, state); break;
+            case States::kRegen: RegenLoop(interface, state); break;
+            case States::kCharging: ChargingLoop(interface, state); break;
+            default: FaultLoop(interface, state); break;
         }
     }
 

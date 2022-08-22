@@ -11,8 +11,9 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
+#pragma once
+
 #include "interfacing.hpp"
-#include "states.hpp"
 #include "controller_maths.hpp"
 
 enum class States {
@@ -35,22 +36,22 @@ enum class DriveModes {
 };
 
 
-void Init();
+void Init(Interface* interface, States* state);
 
 
-void IdleLoop();
+void IdleLoop(Interface* interface, States* state);
 
 
-void ReadyLoop();
+void ReadyLoop(Interface* interface, States* state);
 
 
-void PowerLoop(Interface* interface);
+void PowerLoop(Interface* interface, States* state);
 
 
-void RegenLoop();
+void RegenLoop(Interface* interface, States* state);
 
 
-void FaultLoop();
+void FaultLoop(Interface* interface, States* state);
 
 
-void ChargingLoop();
+void ChargingLoop(Interface* interface, States* state);
