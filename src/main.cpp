@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== controller.cpp ====
+// ==== main.cpp ====
 //
 // Main script containing the logic to drive an induction motor
 //

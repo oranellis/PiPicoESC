@@ -20,13 +20,15 @@
 
 #include "defines.hpp"
 
-#define PIN_A_HIGH 0
-#define PIN_B_HIGH 1
-#define PIN_C_HIGH 2
-#define PIN_A_LOW 3
-#define PIN_B_LOW 4
-#define PIN_C_LOW 5
+#define PIN_A_HIGH 5
+#define PIN_B_HIGH 4
+#define PIN_C_HIGH 3
+#define PIN_A_LOW 2
+#define PIN_B_LOW 1
+#define PIN_C_LOW 0
 #define LED_PIN PICO_DEFAULT_LED_PIN
+
+#define SOFTWARE_PWM
 
 class Interface {
 
@@ -56,6 +58,7 @@ class Interface {
         // gpio_put(LED_PIN, 1);
 
         // PWM setup
+#ifndef HARDWARE_PWM
         gpio_set_function(PIN_A_HIGH, GPIO_FUNC_PWM);
         gpio_set_function(PIN_B_HIGH, GPIO_FUNC_PWM);
         gpio_set_function(PIN_C_HIGH, GPIO_FUNC_PWM);
@@ -98,6 +101,17 @@ class Interface {
         pwm_set_enabled(slice_a_low, true);
         pwm_set_enabled(slice_b_low, true);
         pwm_set_enabled(slice_c_low, true);
+#endif
+#ifndef SOFTWARE_PWM
+
+        gpio_set_dir(PIN_A_HIGH, GPIO_OUT);
+        gpio_set_dir(PIN_B_HIGH, GPIO_OUT);
+        gpio_set_dir(PIN_C_HIGH, GPIO_OUT);
+        gpio_set_dir(PIN_A_LOW, GPIO_OUT);
+        gpio_set_dir(PIN_B_LOW, GPIO_OUT);
+        gpio_set_dir(PIN_C_LOW, GPIO_OUT);
+
+#endif
     }
 
     void PwmALevel(int level) {
@@ -142,6 +156,64 @@ class Interface {
         else {
             pwm_set_chan_level(slice_c_high, channel_c_high, 0);
             pwm_set_chan_level(slice_c_low, channel_c_low, 0);
+        }
+    }
+
+
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetAState(char high_low) {
+        if (high_low == 'h') {
+            gpio_put(PIN_A_LOW, false);
+            gpio_put(PIN_A_HIGH, true);
+            return;
+        }
+        if (high_low == 'l') {
+            gpio_put(PIN_A_HIGH, false);
+            gpio_put(PIN_A_LOW, true);
+            return;
+        }
+        if (high_low == 'f') {
+            gpio_put(PIN_A_HIGH, false);
+            gpio_put(PIN_A_LOW, false);
+            return;
+        }
+    }
+
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetBState(char high_low) {
+        if (high_low == 'h') {
+            gpio_put(PIN_B_LOW, false);
+            gpio_put(PIN_B_HIGH, true);
+            return;
+        }
+        if (high_low == 'l') {
+            gpio_put(PIN_B_HIGH, false);
+            gpio_put(PIN_B_LOW, true);
+            return;
+        }
+        if (high_low == 'f') {
+            gpio_put(PIN_B_HIGH, false);
+            gpio_put(PIN_B_LOW, false);
+            return;
+        }
+    }
+
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetCState(char high_low) {
+        if (high_low == 'h') {
+            gpio_put(PIN_B_LOW, false);
+            gpio_put(PIN_B_HIGH, true);
+            return;
+        }
+        if (high_low == 'l') {
+            gpio_put(PIN_B_HIGH, false);
+            gpio_put(PIN_B_LOW, true);
+            return;
+        }
+        if (high_low == 'f') {
+            gpio_put(PIN_B_HIGH, false);
+            gpio_put(PIN_B_LOW, false);
+            return;
         }
     }
 };
