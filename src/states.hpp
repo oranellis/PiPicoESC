@@ -4,14 +4,16 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== states.h ====
+// ==== states.hpp ====
 //
 // Header file for states.cpp
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "interfacing.h"
+#include "interfacing.hpp"
+#include "states.hpp"
+#include "controller_maths.hpp"
 
 enum class States {
     kFault,

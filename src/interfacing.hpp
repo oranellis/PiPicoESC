@@ -4,22 +4,19 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== interfacing.h ====
+// ==== interfacing.hpp ====
 //
 // Header for interfacing.cpp
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-
-#include "defines.h"
-
 #include "boards/pico.h"
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-#include <stdio.h>
+#include "defines.hpp"
 
 #define PIN_A_HIGH 0
 #define PIN_B_HIGH 1
@@ -48,8 +45,7 @@ class Interface {
 
     public:
     Interface() {
-        
-         // IO Initialisation 
+        // IO Initialisation
         stdio_init_all();
 
         // LED setup
@@ -71,7 +67,7 @@ class Interface {
         slice_a_low = pwm_gpio_to_slice_num(PIN_A_LOW);
         slice_b_low = pwm_gpio_to_slice_num(PIN_B_LOW);
         slice_c_low = pwm_gpio_to_slice_num(PIN_C_LOW);
-        
+
         channel_a_high = pwm_gpio_to_channel(PIN_A_HIGH);
         channel_b_high = pwm_gpio_to_channel(PIN_B_HIGH);
         channel_c_high = pwm_gpio_to_channel(PIN_C_HIGH);
