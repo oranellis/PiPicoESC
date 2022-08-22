@@ -11,7 +11,10 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "interfacing.h"
+#pragma once
+
+#include "interfacing.hpp"
+#include "controller_maths.hpp"
 
 enum class States {
     kFault,

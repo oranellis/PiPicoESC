@@ -11,12 +11,9 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "interfacing.h"
-#include "states.h"
-#include "controller_maths.h"
+#include "states.hpp"
 
-
-// currently the following are constants but must be dynamically assigned 
+// currently the following are constants but must be dynamically assigned
 double v_command = 1; // Between 0 and 1
 double field_rps_command = 8; // Flux rotation speed/synchronous speed
 const int phase_steps = 1; // Can be a multiple of 2 up to 512 to reduce resolution

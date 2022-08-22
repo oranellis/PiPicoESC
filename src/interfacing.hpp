@@ -11,15 +11,16 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
+#pragma once
 
-#include "defines.h"
+#include <stdio.h>
 
 #include "boards/pico.h"
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-#include <stdio.h>
+#include "defines.hpp"
 
 #define PIN_A_HIGH 0
 #define PIN_B_HIGH 1

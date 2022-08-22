@@ -11,6 +11,8 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
+#pragma once
+
 #define N_POLES 2
 #define V_S_FALLBACK 400
 
