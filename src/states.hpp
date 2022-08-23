@@ -14,7 +14,7 @@
 #pragma once
 
 #include "interfacing.hpp"
-#include "controller_maths.hpp"
+#include "maths.hpp"
 
 enum class States {
     kFault,

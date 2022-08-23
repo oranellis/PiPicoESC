@@ -14,7 +14,7 @@
 #include "pico/stdio.h"
 #include "pico/time.h"
 
-#include "controller_maths.hpp"
+#include "maths.hpp"
 #include "interfacing.hpp"
 #include "states.hpp"
 

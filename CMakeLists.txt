@@ -24,7 +24,7 @@ project(PiPicoESC)
 pico_sdk_init()
 
 add_executable(controller
-    src/controller.cpp
+    src/main.cpp
     src/states.cpp
 )
 

@@ -15,7 +15,7 @@
 
 // currently the following are constants but must be dynamically assigned
 double v_command = 1; // Between 0 and 1
-double field_rps_command = 8; // Flux rotation speed/synchronous speed
+double field_rps_command = 2; // Flux rotation speed/synchronous speed
 const int phase_steps = 1; // Can be a multiple of 2 up to 512 to reduce resolution
 const int phase_res = 1536/phase_steps; // Number of steps through one sin wave
 
