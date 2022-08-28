@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== states.h ====
+// ==== states.hpp ====
 //
 // Header file for states.cpp
 //
@@ -13,8 +13,10 @@
 
 #pragma once
 
+#include "pico/stdlib.h"
+
 #include "interfacing.hpp"
-#include "controller_maths.hpp"
+#include "maths.hpp"
 
 enum class States {
     kFault,
@@ -23,7 +25,8 @@ enum class States {
     kRegen,
     kCharging,
     kIdle,
-    kPower
+    kPower,
+    kTest
 };
 
 enum class DriveModes {
@@ -36,22 +39,25 @@ enum class DriveModes {
 };
 
 
-void Init();
+void TestLoop(Interface* interface, States* state);
 
 
-void IdleLoop();
+void Init(Interface* interface, States* state);
 
 
-void ReadyLoop();
+void IdleLoop(Interface* interface, States* state);
 
 
-void PowerLoop(Interface* interface);
+void ReadyLoop(Interface* interface, States* state);
 
 
-void RegenLoop();
+void PowerLoop(Interface* interface, States* state);
 
 
-void FaultLoop();
+void RegenLoop(Interface* interface, States* state);
 
 
-void ChargingLoop();
+void FaultLoop(Interface* interface, States* state);
+
+
+void ChargingLoop(Interface* interface, States* state);
