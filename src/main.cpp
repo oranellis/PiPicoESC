@@ -40,6 +40,7 @@ int main() {
             case States::kPower: PowerLoop(interface, state); break;
             case States::kRegen: RegenLoop(interface, state); break;
             case States::kCharging: ChargingLoop(interface, state); break;
+            case States::kTest: TestLoop(interface, state);
             default: FaultLoop(interface, state); break;
         }
     }

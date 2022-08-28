@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "pico/stdlib.h"
+
 #include "interfacing.hpp"
 #include "maths.hpp"
 
@@ -23,7 +25,8 @@ enum class States {
     kRegen,
     kCharging,
     kIdle,
-    kPower
+    kPower,
+    kTest
 };
 
 enum class DriveModes {
@@ -34,6 +37,9 @@ enum class DriveModes {
     kDrive,
     kSpeeeeeed,
 };
+
+
+void TestLoop(Interface* interface, States* state);
 
 
 void Init(Interface* interface, States* state);

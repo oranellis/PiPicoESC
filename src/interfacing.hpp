@@ -28,7 +28,7 @@
 #define PIN_C_LOW 0
 #define LED_PIN PICO_DEFAULT_LED_PIN
 
-#define SOFTWARE_PWM
+#define HARDWARE_PWM
 
 class Interface {
 
@@ -50,15 +50,15 @@ class Interface {
     public:
     Interface() {
         // IO Initialisation
-        stdio_init_all();
+        // stdio_init_all();
 
         // LED setup
-        // gpio_init(LED_PIN);
-        // gpio_set_dir(LED_PIN, GPIO_OUT);
-        // gpio_put(LED_PIN, 1);
+        gpio_init(LED_PIN);
+        gpio_set_dir(LED_PIN, GPIO_OUT);
+        gpio_put(LED_PIN, 1);
 
         // PWM setup
-#ifndef HARDWARE_PWM
+
         gpio_set_function(PIN_A_HIGH, GPIO_FUNC_PWM);
         gpio_set_function(PIN_B_HIGH, GPIO_FUNC_PWM);
         gpio_set_function(PIN_C_HIGH, GPIO_FUNC_PWM);
@@ -101,17 +101,6 @@ class Interface {
         pwm_set_enabled(slice_a_low, true);
         pwm_set_enabled(slice_b_low, true);
         pwm_set_enabled(slice_c_low, true);
-#endif
-#ifndef SOFTWARE_PWM
-
-        gpio_set_dir(PIN_A_HIGH, GPIO_OUT);
-        gpio_set_dir(PIN_B_HIGH, GPIO_OUT);
-        gpio_set_dir(PIN_C_HIGH, GPIO_OUT);
-        gpio_set_dir(PIN_A_LOW, GPIO_OUT);
-        gpio_set_dir(PIN_B_LOW, GPIO_OUT);
-        gpio_set_dir(PIN_C_LOW, GPIO_OUT);
-
-#endif
     }
 
     void PwmALevel(int level) {
