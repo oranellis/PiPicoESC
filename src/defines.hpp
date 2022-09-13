@@ -12,8 +12,3 @@
 // Licence: GPLv3
 
 #pragma once
-<<<<<<< HEAD
-=======
-
-
->>>>>>> gatedriver_testing

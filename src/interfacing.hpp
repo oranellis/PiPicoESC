@@ -12,11 +12,6 @@
 // Licence: GPLv3
 
 #pragma once
-<<<<<<< HEAD
-
-#include <stdio.h>
-=======
->>>>>>> gatedriver_testing
 
 #include "boards/pico.h"
 #include "pico/stdlib.h"
