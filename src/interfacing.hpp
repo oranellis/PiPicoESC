@@ -101,16 +101,20 @@ class Interface {
         pwm_set_enabled(slice_a_low, true);
         pwm_set_enabled(slice_b_low, true);
         pwm_set_enabled(slice_c_low, true);
+        /* for (int i=0; i<6; i++) { */
+        /*     gpio_init(i); */
+        /*     gpio_set_dir(i, GPIO_OUT); */
+        /* } */
     }
 
     void PwmALevel(int level) {
         if (level > 0) {
             pwm_set_chan_level(slice_a_low, channel_a_low, 0);
-            pwm_set_chan_level(slice_a_high, channel_a_high, MIN(level, 4096));
+            pwm_set_chan_level(slice_a_high, channel_a_high, MIN(level, 4095));
         }
         else if (level < 0) {
             pwm_set_chan_level(slice_a_high, channel_a_high, 0);
-            pwm_set_chan_level(slice_a_low, channel_a_low, MIN(-level, 4096));
+            pwm_set_chan_level(slice_a_low, channel_a_low, MIN(-level, 4095));
         }
         else {
             pwm_set_chan_level(slice_a_high, channel_a_high, 0);
@@ -202,6 +206,62 @@ class Interface {
         if (high_low == 'f') {
             gpio_put(PIN_B_HIGH, false);
             gpio_put(PIN_B_LOW, false);
+            return;
+        }
+    }
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetAStatePWM(char high_low, double v_command) {
+        if (high_low == 'h') {
+            pwm_set_chan_level(slice_a_high, channel_a_high, v_command*4095);
+            pwm_set_chan_level(slice_a_low, channel_a_low, 0);
+            return;
+        }
+        if (high_low == 'l') {
+            pwm_set_chan_level(slice_a_high, channel_a_high, 0);
+            pwm_set_chan_level(slice_a_low, channel_a_low, v_command*4095);
+            return;
+        }
+        if (high_low == 'f') {
+            pwm_set_chan_level(slice_a_high, channel_a_high, 0);
+            pwm_set_chan_level(slice_a_low, channel_a_low, 0);
+            return;
+        }
+    }
+
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetBStatePWM(char high_low, double v_command) {
+        if (high_low == 'h') {
+            pwm_set_chan_level(slice_b_high, channel_b_high, v_command*4095);
+            pwm_set_chan_level(slice_b_low, channel_b_low, 0);
+            return;
+        }
+        if (high_low == 'l') {
+            pwm_set_chan_level(slice_b_high, channel_b_high, 0);
+            pwm_set_chan_level(slice_b_low, channel_b_low, v_command*4095);
+            return;
+        }
+        if (high_low == 'f') {
+            pwm_set_chan_level(slice_b_high, channel_b_high, 0);
+            pwm_set_chan_level(slice_b_low, channel_b_low, 0);
+            return;
+        }
+    }
+
+    // Set the state of the phase to (h)igh, (l)ow or (f)loating
+    void SetCStatePWM(char high_low, double v_command) {
+        if (high_low == 'h') {
+            pwm_set_chan_level(slice_c_high, channel_c_high, v_command*4095);
+            pwm_set_chan_level(slice_c_low, channel_c_low, 0);
+            return;
+        }
+        if (high_low == 'l') {
+            pwm_set_chan_level(slice_c_high, channel_c_high, 0);
+            pwm_set_chan_level(slice_c_low, channel_c_low, v_command*4095);
+            return;
+        }
+        if (high_low == 'f') {
+            pwm_set_chan_level(slice_c_high, channel_c_high, 0);
+            pwm_set_chan_level(slice_c_low, channel_c_low, 0);
             return;
         }
     }

@@ -39,9 +39,6 @@ enum class DriveModes {
 };
 
 
-void TestLoop(Interface* interface, States* state);
-
-
 void Init(Interface* interface, States* state);
 
 
