@@ -14,9 +14,11 @@
 #pragma once
 
 #include "pico/stdlib.h"
+#include "pico/util/queue.h"
 
 #include "interfacing.hpp"
 #include "maths.hpp"
+#include "core_io.hpp"
 
 enum class States {
     kFault,
@@ -29,6 +31,7 @@ enum class States {
     kTest
 };
 
+
 enum class DriveModes {
     kPark,
     kReverse,
@@ -39,22 +42,29 @@ enum class DriveModes {
 };
 
 
-void Init(Interface* interface, States* state);
+void core_1_irq_handler();
 
 
-void IdleLoop(Interface* interface, States* state);
+void Init();
 
 
-void ReadyLoop(Interface* interface, States* state);
+void IdleLoop();
 
 
-void PowerLoop(Interface* interface, States* state);
+void ReadyLoop();
 
 
-void RegenLoop(Interface* interface, States* state);
+void PowerLoop();
 
 
-void FaultLoop(Interface* interface, States* state);
+void RegenLoop();
 
 
-void ChargingLoop(Interface* interface, States* state);
+void FaultLoop();
+
+
+void ChargingLoop();
+
+
+// Global state variable declaration
+extern States state;

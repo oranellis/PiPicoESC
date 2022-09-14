@@ -8,40 +8,95 @@
 //
 // Main script containing the logic to drive an induction motor
 //
+//
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
 #include "pico/stdio.h"
 #include "pico/time.h"
+#include "pico/multicore.h"
+#include "pico/util/queue.h"
 
 #include "maths.hpp"
 #include "interfacing.hpp"
 #include "states.hpp"
+#include "core_io.hpp"
 
+
+// Global variable declaration
+States state; // From extern in states.hpp
+Interface interface; // From extern in interface.hpp
+queue_t command_queue; // From extern in core_io.hpp
+
+
+void core_1_entry() {
+    // =================== Core 1 Setup ===================
+    irq_clear(COMMAND_INTERUPT);
+    irq_add_shared_handler(COMMAND_INTERUPT, core_1_irq_handler, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY); // irq handler defined in states.hpp
+
+
+    // =================== Main Event Loop ===================
+    while (1) {
+        if (!queue_is_empty(&command_queue)) {
+            Message recieved_message;
+            queue_remove_blocking(&command_queue, &recieved_message);
+            if (recieved_message.type == 'm') {
+                switch (recieved_message.data) {
+                    case (uint16_t) States::kFault: state = States::kFault; break;
+                    case (uint16_t) States::kInit: state = States::kInit; break;
+                    case (uint16_t) States::kIdle: state = States::kIdle; break;
+                    case (uint16_t) States::kReady: state = States::kReady; break;
+                    case (uint16_t) States::kPower: state = States::kPower; break;
+                    case (uint16_t) States::kRegen: state = States::kRegen; break;
+                    case (uint16_t) States::kCharging: state = States::kCharging; break;
+                }
+            }
+        }
+        switch (state) {
+            case States::kFault: FaultLoop(); break;
+            case States::kInit: Init(); break;
+            case States::kIdle: IdleLoop(); break;
+            case States::kReady: ReadyLoop(); break;
+            case States::kPower: PowerLoop(); break;
+            case States::kRegen: RegenLoop(); break;
+            case States::kCharging: ChargingLoop(); break;
+            default: FaultLoop(); break;
+        }
+    }
+}
 
 
 int main() {
+    // =================== Setup ===================
+    queue_init(&command_queue, sizeof(Message), 4);
+    multicore_launch_core1(core_1_entry);
 
-    // =================== Interfacing setup ===================
-    Interface i;
-    Interface * interface = &i;
+    Message message('m',' ', (uint16_t) States::kFault);
+    queue_add_blocking(&command_queue, &message);
+    sleep_ms(4000);
 
-    States s = States::kInit; // The current controller state
-    States * state = &s;
+    message = Message('m',' ', (uint16_t) States::kInit);
+    queue_add_blocking(&command_queue, &message);
+    sleep_ms(6000);
+    gpio_put(LED_PIN, false);
 
-    // =================== Main Event Loop ===================
+    for (int r = 120; r < 200; r++) {
+        message = Message('r','s', (uint16_t) r);
+        queue_add_blocking(&command_queue, &message);
+        sleep_ms(50);
+    }
 
-    while (1) {
-        switch (*state) {
-            case States::kFault: FaultLoop(interface, state); break;
-            case States::kInit: Init(interface, state); break;
-            case States::kIdle: IdleLoop(interface, state); break;
-            case States::kReady: ReadyLoop(interface, state); break;
-            case States::kPower: PowerLoop(interface, state); break;
-            case States::kRegen: RegenLoop(interface, state); break;
-            case States::kCharging: ChargingLoop(interface, state); break;
-            default: FaultLoop(interface, state); break;
-        }
+
+    message = Message('m',' ', (uint16_t) States::kFault);
+    queue_add_blocking(&command_queue, &message);
+
+    // =================== Terminal Loop ===================
+    // must delay the program termination so the core_1 code can run
+    while (true) {
+        sleep_ms(250);
+        gpio_put(LED_PIN, true);
+        sleep_ms(250);
+        gpio_put(LED_PIN, false);
     }
 
     return 0;

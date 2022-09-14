@@ -107,6 +107,15 @@ class Interface {
         /* } */
     }
 
+    void led(bool on_state) {
+        if (on_state == true) {
+            gpio_put(LED_PIN, true);
+        }
+        else {
+            gpio_put(LED_PIN, false);
+        }
+    }
+
     void PwmALevel(int level) {
         if (level > 0) {
             pwm_set_chan_level(slice_a_low, channel_a_low, 0);
@@ -266,3 +275,7 @@ class Interface {
         }
     }
 };
+
+
+// Global interface declaration
+extern Interface interface;
