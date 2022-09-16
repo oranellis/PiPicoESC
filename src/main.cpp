@@ -31,9 +31,9 @@ queue_t command_queue; // From extern in core_io.hpp
 
 void core_1_entry() {
     // =================== Core 1 Setup ===================
-    irq_clear(COMMAND_INTERUPT);
-    irq_add_shared_handler(COMMAND_INTERUPT, core_1_irq_handler, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY); // irq handler defined in states.hpp
-    irq_set_enabled(COMMAND_INTERUPT, true);
+    // irq_clear(COMMAND_INTERUPT);
+    // irq_add_shared_handler(COMMAND_INTERUPT, core_1_irq_handler, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY); // irq handler defined in states.hpp
+    // irq_set_enabled(COMMAND_INTERUPT, true);
 
 
     // =================== Main Event Loop ===================
@@ -42,15 +42,7 @@ void core_1_entry() {
             Message recieved_message;
             queue_remove_blocking(&command_queue, &recieved_message);
             if (recieved_message.type == 'm') {
-                switch (recieved_message.data) {
-                    case (uint32_t) States::kFault: state = States::kFault; break;
-                    case (uint32_t) States::kInit: state = States::kInit; break;
-                    case (uint32_t) States::kIdle: state = States::kIdle; break;
-                    case (uint32_t) States::kReady: state = States::kReady; break;
-                    case (uint32_t) States::kPower: state = States::kPower; break;
-                    case (uint32_t) States::kRegen: state = States::kRegen; break;
-                    case (uint32_t) States::kCharging: state = States::kCharging; break;
-                }
+                state = static_cast<States>(recieved_message.data);
             }
         }
         switch (state) {
@@ -69,6 +61,7 @@ void core_1_entry() {
 
 int main() {
     // =================== Setup ===================
+    state = States::kInit
     queue_init(&command_queue, sizeof(Message), 4);
     multicore_launch_core1(core_1_entry);
 

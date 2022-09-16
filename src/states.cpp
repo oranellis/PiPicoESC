@@ -108,7 +108,7 @@ void PowerLoop() {
                         field_rps_command = (double) message.data / 1000;
                         break;
                     case 'm':
-                        state = (States) message.data;
+                        state = static_cast<States>(message.data);
                         break;
                 }
             }
@@ -176,10 +176,10 @@ void RegenLoop() {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
                     case 'r':
-                        field_rps_command = (double) message.data / 1000;
+                        field_rps_command = (double) message.data / 1;
                         break;
                     case 'm':
-                        state = (States) message.data;
+                        state = static_cast<States>(message.data);
                         break;
                 }
             }
@@ -195,7 +195,7 @@ void RegenLoop() {
 
 
 void FaultLoop() {
-    printf("Fault, halting...");
+    // printf("Fault, halting...");
     interface.PwmALevel(0);
     interface.PwmBLevel(0);
     interface.PwmCLevel(0);

@@ -43,7 +43,7 @@ enum class DriveModes {
 };
 
 
-void core_1_irq_handler();
+// void core_1_irq_handler();
 
 
 void Init();
