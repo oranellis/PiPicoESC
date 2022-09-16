@@ -16,6 +16,7 @@
 #include "hardware/irq.h"
 #include "pico/util/queue.h"
 
+#include "common/types.hpp"
 
 #define COMMAND_INTERUPT 26
 
@@ -42,9 +43,14 @@ struct Message {
 };
 
 
-// Inline helper function to ensure messages are sent correctly
-inline void messaging_wrapper(Message message) {
+// Inline helper function to handle sending messages
+inline void messaging_wrapper(char type, uint32_t data) {
+    Message message(type, data);
     queue_add_blocking(&command_queue, &message);
-    if (message.type != 'r') {
-    }
+}
+
+//Overload for above to allow automatic inference of mode change
+inline void messaging_wrapper(States message_state) {
+    Message message('m', static_cast<uint32_t>(message_state));
+    queue_add_blocking(&command_queue, &message);
 }

@@ -17,10 +17,11 @@
 #include "pico/multicore.h"
 #include "pico/util/queue.h"
 
-#include "maths.hpp"
-#include "interfacing.hpp"
-#include "states.hpp"
-#include "core_io.hpp"
+#include "common/types.hpp"
+#include "common/maths.hpp"
+#include "platform/pico/core_io.hpp"
+#include "platform/pico/interfacing.hpp"
+#include "schemes/sin/states.hpp"
 
 
 // Global variable declaration
@@ -61,27 +62,24 @@ void core_1_entry() {
 
 int main() {
     // =================== Setup ===================
+    // Initialise command queue
     queue_init(&command_queue, sizeof(Message), 4);
     multicore_launch_core1(core_1_entry);
 
-    Message message('m', static_cast<uint32_t>(States::kFault));
-    queue_add_blocking(&command_queue, &message);
+    messaging_wrapper(States::kFault);
     sleep_ms(4000);
 
-    message = Message('m', static_cast<uint32_t>(States::kInit));
-    queue_add_blocking(&command_queue, &message);
+    messaging_wrapper(States::kInit);
     sleep_ms(6000);
     gpio_put(LED_PIN, false);
 
     for (int r = 120; r < 200; r++) {
-        message = Message('r', (uint32_t) r*1000);
-        queue_add_blocking(&command_queue, &message);
+        messaging_wrapper('r', static_cast<uint32_t>(r*1000));
         sleep_ms(50);
     }
 
 
-    message = Message('m', static_cast<uint32_t>(States::kFault));
-    queue_add_blocking(&command_queue, &message);
+    messaging_wrapper(States::kFault);
 
     // =================== Terminal Loop ===================
     // must delay the program termination so the core_1 code can run

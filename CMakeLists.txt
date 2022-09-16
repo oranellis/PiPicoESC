@@ -25,8 +25,10 @@ pico_sdk_init()
 
 add_executable(controller
     src/main.cpp
-    src/states.cpp
+    src/schemes/sin/states.cpp
 )
+
+target_include_directories(controller PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 target_link_libraries(controller pico_stdlib hardware_gpio hardware_pwm pico_multicore)
 
