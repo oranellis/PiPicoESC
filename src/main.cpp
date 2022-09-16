@@ -1,4 +1,4 @@
-//  ____  _ ____  _           _____ ____   ____
+// ____  _ ____  _           _____ ____   ____
 // |  _ \(_)  _ \(_) ___ ___ | ____/ ___| / ___|
 // | |_) | | |_) | |/ __/ _ \|  _| \___ \| |
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
@@ -33,6 +33,7 @@ void core_1_entry() {
     // =================== Core 1 Setup ===================
     irq_clear(COMMAND_INTERUPT);
     irq_add_shared_handler(COMMAND_INTERUPT, core_1_irq_handler, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY); // irq handler defined in states.hpp
+    irq_set_enabled(COMMAND_INTERUPT, true);
 
 
     // =================== Main Event Loop ===================
@@ -42,13 +43,13 @@ void core_1_entry() {
             queue_remove_blocking(&command_queue, &recieved_message);
             if (recieved_message.type == 'm') {
                 switch (recieved_message.data) {
-                    case (uint16_t) States::kFault: state = States::kFault; break;
-                    case (uint16_t) States::kInit: state = States::kInit; break;
-                    case (uint16_t) States::kIdle: state = States::kIdle; break;
-                    case (uint16_t) States::kReady: state = States::kReady; break;
-                    case (uint16_t) States::kPower: state = States::kPower; break;
-                    case (uint16_t) States::kRegen: state = States::kRegen; break;
-                    case (uint16_t) States::kCharging: state = States::kCharging; break;
+                    case (uint32_t) States::kFault: state = States::kFault; break;
+                    case (uint32_t) States::kInit: state = States::kInit; break;
+                    case (uint32_t) States::kIdle: state = States::kIdle; break;
+                    case (uint32_t) States::kReady: state = States::kReady; break;
+                    case (uint32_t) States::kPower: state = States::kPower; break;
+                    case (uint32_t) States::kRegen: state = States::kRegen; break;
+                    case (uint32_t) States::kCharging: state = States::kCharging; break;
                 }
             }
         }
@@ -71,23 +72,23 @@ int main() {
     queue_init(&command_queue, sizeof(Message), 4);
     multicore_launch_core1(core_1_entry);
 
-    Message message('m',' ', (uint16_t) States::kFault);
+    Message message('m', (uint32_t) States::kFault);
     queue_add_blocking(&command_queue, &message);
     sleep_ms(4000);
 
-    message = Message('m',' ', (uint16_t) States::kInit);
+    message = Message('m', (uint32_t) States::kInit);
     queue_add_blocking(&command_queue, &message);
     sleep_ms(6000);
     gpio_put(LED_PIN, false);
 
     for (int r = 120; r < 200; r++) {
-        message = Message('r','s', (uint16_t) r);
+        message = Message('r', (uint32_t) r);
         queue_add_blocking(&command_queue, &message);
         sleep_ms(50);
     }
 
 
-    message = Message('m',' ', (uint16_t) States::kFault);
+    message = Message('m', (uint32_t) States::kFault);
     queue_add_blocking(&command_queue, &message);
 
     // =================== Terminal Loop ===================

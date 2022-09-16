@@ -20,16 +20,6 @@
 
 #include "defines.hpp"
 
-#define PIN_A_HIGH 5
-#define PIN_B_HIGH 4
-#define PIN_C_HIGH 3
-#define PIN_A_LOW 2
-#define PIN_B_LOW 1
-#define PIN_C_LOW 0
-#define LED_PIN PICO_DEFAULT_LED_PIN
-
-#define HARDWARE_PWM
-
 class Interface {
 
     private:

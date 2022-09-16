@@ -23,23 +23,19 @@ const int phase_steps = 1; // Can be a multiple of 2 up to 512 to reduce resolut
 const int phase_res = 1536/phase_steps; // Number of steps through one sin wave
 
 
-// Interupt handler for interupting running command loops
-void core_1_irq_handler() {
-    if (!queue_is_empty(&command_queue)) {
-        Message recieved_message(' ',' ', 0);
-        queue_remove_blocking(&command_queue, &recieved_message);
-        if (recieved_message.type == 'm') {
-            switch (recieved_message.data) {
-                case (uint16_t) States::kFault: state = States::kFault; break;
-                case (uint16_t) States::kInit: state = States::kInit; break;
-                default: state = States::kPower; break; // change default to fault after testing
-            }
-        }
-        else if (recieved_message.type == 'r') {
-            field_rps_command = recieved_message.data;
-        }
-    }
-}
+// Interupt handler for interupting running command loops, not sure how to fire an interupt though so not used yet
+// void core_1_irq_handler() {
+//     if (!queue_is_empty(&command_queue)) {
+//         Message recieved_message;
+//         queue_remove_blocking(&command_queue, &recieved_message);
+//         if (recieved_message.type == 'm') {
+//             state = (States) recieved_message.data;
+//         }
+//         else if (recieved_message.type == 'r') {
+//             field_rps_command = recieved_message.data;
+//         }
+//     }
+// }
 
 
 void Init() {
@@ -89,6 +85,7 @@ void IdleLoop() {
 
 
 void ReadyLoop() {
+    tight_loop_contents();
 }
 
 
@@ -99,10 +96,29 @@ void PowerLoop() {
     volatile int counter = 0; // For debugging
     volatile long timeold = time_us_64(), timenow = timeold; // For debugging
     int wait_time;
+    Message message;
 
     // This while loop can be moved to the second core and this core can manage the field speed and voltage based on throttle and current motor rps
     while (1) {
+        if (!queue_is_empty(&command_queue)) {
+            while (!queue_is_empty(&command_queue)) {
+                queue_remove_blocking(&command_queue, &message);
+                switch (message.type) {
+                    case 'r':
+                        field_rps_command = (double) message.data / 1000;
+                        break;
+                    case 'm':
+                        state = (States) message.data;
+                        break;
+                }
+            }
+            if (state != States::kPower) {
+                break;
+            }
+        }
         wait_time = 166667/(field_rps_command);
+
+        // TODO Implement Sin PWM control
         /* if (loopInterupt) { */
         /* } */
         /* phase_a_pos = (phase_a_pos + phase_steps) % 1536; */
@@ -132,6 +148,8 @@ void PowerLoop() {
         /* } */
 
         /* sleep_us((1000000/(field_rps_command*phase_res))); */
+
+        // Square wave, fixed rpm, implementation
         interface.SetAStatePWM('h', v_command);
         sleep_us(wait_time);
         interface.SetCStatePWM('l', v_command);
@@ -149,21 +167,41 @@ void PowerLoop() {
 
 
 void RegenLoop() {
+    int wait_time;
+    Message message;
+
     while (1) {
-        state = States::kFault;
-
-        if (v_command >= 0) {
-            state = States::kIdle;
+        if (!queue_is_empty(&command_queue)) {
+            while (!queue_is_empty(&command_queue)) {
+                queue_remove_blocking(&command_queue, &message);
+                switch (message.type) {
+                    case 'r':
+                        field_rps_command = (double) message.data / 1000;
+                        break;
+                    case 'm':
+                        state = (States) message.data;
+                        break;
+                }
+            }
+            if (state != States::kRegen) {
+                break;
+            }
         }
+        wait_time = 166667/(field_rps_command);
 
-        if (state == States::kFault) {
-            break;
-        }
+        // TODO Implement regen loop
     }
 }
 
 
 void FaultLoop() {
+    printf("Fault, halting...");
+    interface.PwmALevel(0);
+    interface.PwmBLevel(0);
+    interface.PwmCLevel(0);
+    while (true) {
+        tight_loop_contents();
+    }
 }
 
 void ChargingLoop() {

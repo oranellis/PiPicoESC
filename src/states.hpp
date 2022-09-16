@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "pico/stdio.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 

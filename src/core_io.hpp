@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "hardware/irq.h"
 #include "pico/util/queue.h"
 
 
@@ -25,20 +26,17 @@ extern bool core_1_loop_interupt;
 
 struct Message {
     char type;
-    char subtype;
-    uint16_t data;
+    uint32_t data;
 
     // Empty constructor
     Message() {
         type = ' ';
-        subtype = ' ';
         data = 0;
     }
 
     // Populating constructor
-    Message(char init_type, char init_subtype, uint16_t init_data) {
+    Message(char init_type, uint32_t init_data) {
         type = init_type;
-        subtype = init_subtype;
         data = init_data;
     }
 };
@@ -47,4 +45,6 @@ struct Message {
 // Inline helper function to ensure messages are sent correctly
 inline void messaging_wrapper(Message message) {
     queue_add_blocking(&command_queue, &message);
+    if (message.type != 'r') {
+    }
 }
