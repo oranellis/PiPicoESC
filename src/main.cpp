@@ -74,7 +74,7 @@ int main() {
     gpio_put(LED_PIN, false);
 
     for (int r = 120; r < 200; r++) {
-        message = Message('r', (uint32_t) r);
+        message = Message('r', (uint32_t) r*1000);
         queue_add_blocking(&command_queue, &message);
         sleep_ms(50);
     }

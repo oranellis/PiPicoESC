@@ -105,7 +105,7 @@ void PowerLoop() {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
                     case 'r':
-                        field_rps_command = (double) message.data / 1;
+                        field_rps_command = (double) message.data / 1000;
                         break;
                     case 'm':
                         state = static_cast<States>(message.data);
@@ -137,7 +137,7 @@ void PowerLoop() {
         /* interface.PwmBLevel(phase_b_level); */
         /* interface.PwmCLevel(phase_c_level); */
 
-        /* if (v_command <= 0) { */
+        /* if (v_command <= 0) { *
         /* interface.PwmALevel(phase_a_level); */
         /*     *state = States::kIdle; */
         /*     break; */
