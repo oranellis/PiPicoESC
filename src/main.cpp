@@ -61,15 +61,14 @@ void core_1_entry() {
 
 int main() {
     // =================== Setup ===================
-    state = States::kInit
     queue_init(&command_queue, sizeof(Message), 4);
     multicore_launch_core1(core_1_entry);
 
-    Message message('m', (uint32_t) States::kFault);
+    Message message('m', static_cast<uint32_t>(States::kFault));
     queue_add_blocking(&command_queue, &message);
     sleep_ms(4000);
 
-    message = Message('m', (uint32_t) States::kInit);
+    message = Message('m', static_cast<uint32_t>(States::kInit));
     queue_add_blocking(&command_queue, &message);
     sleep_ms(6000);
     gpio_put(LED_PIN, false);
@@ -81,7 +80,7 @@ int main() {
     }
 
 
-    message = Message('m', (uint32_t) States::kFault);
+    message = Message('m', static_cast<uint32_t>(States::kFault));
     queue_add_blocking(&command_queue, &message);
 
     // =================== Terminal Loop ===================

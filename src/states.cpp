@@ -105,7 +105,7 @@ void PowerLoop() {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
                     case 'r':
-                        field_rps_command = (double) message.data / 1000;
+                        field_rps_command = (double) message.data / 1;
                         break;
                     case 'm':
                         state = static_cast<States>(message.data);
@@ -199,9 +199,6 @@ void FaultLoop() {
     interface.PwmALevel(0);
     interface.PwmBLevel(0);
     interface.PwmCLevel(0);
-    while (true) {
-        tight_loop_contents();
-    }
 }
 
 void ChargingLoop() {
