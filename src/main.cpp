@@ -47,14 +47,14 @@ void core_1_entry() {
             }
         }
         switch (state) {
-            case States::kFault: FaultLoop(); break;
+            case States::kFault: Fault(); break;
             case States::kInit: Init(); break;
             case States::kIdle: IdleLoop(); break;
-            case States::kReady: ReadyLoop(); break;
+            case States::kDisabled: Disabled(); break;
             case States::kPower: PowerLoop(); break;
             case States::kRegen: RegenLoop(); break;
             case States::kCharging: ChargingLoop(); break;
-            default: FaultLoop(); break;
+            default: Fault(); break;
         }
     }
 }
@@ -74,7 +74,7 @@ int main() {
     gpio_put(LED_PIN, false);
 
     for (int r = 120; r < 200; r++) {
-        messaging_wrapper('r', static_cast<uint32_t>(r*1000));
+        messaging_wrapper('r', static_cast<int32_t>(r*1000));
         sleep_ms(50);
     }
 

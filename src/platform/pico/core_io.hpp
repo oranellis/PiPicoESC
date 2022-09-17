@@ -27,7 +27,7 @@ extern bool core_1_loop_interupt;
 
 struct Message {
     char type;
-    uint32_t data;
+    int32_t data;
 
     // Empty constructor
     Message() {
@@ -36,7 +36,7 @@ struct Message {
     }
 
     // Populating constructor
-    Message(char init_type, uint32_t init_data) {
+    Message(char init_type, int32_t init_data) {
         type = init_type;
         data = init_data;
     }
@@ -44,13 +44,13 @@ struct Message {
 
 
 // Inline helper function to handle sending messages
-inline void messaging_wrapper(char type, uint32_t data) {
+inline void messaging_wrapper(char type, int32_t data) {
     Message message(type, data);
     queue_add_blocking(&command_queue, &message);
 }
 
 //Overload for above to allow automatic inference of mode change
 inline void messaging_wrapper(States message_state) {
-    Message message('m', static_cast<uint32_t>(message_state));
+    Message message('m', static_cast<int32_t>(message_state));
     queue_add_blocking(&command_queue, &message);
 }

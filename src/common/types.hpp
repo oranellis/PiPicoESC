@@ -16,12 +16,11 @@
 enum class States {
     kFault,
     kInit,
-    kReady,
+    kDisabled,
     kRegen,
     kCharging,
     kIdle,
-    kPower,
-    kTest
+    kPower
 };
 
 
@@ -32,4 +31,16 @@ enum class DriveModes {
     kEco,
     kDrive,
     kSpeeeeeed,
+};
+
+
+struct MotorData {
+    double v_command;
+    double field_rps;
+
+    MotorData() {}
+    MotorData(double init_v_command, double init_field_rps) {
+        v_command = init_v_command;
+        field_rps = init_field_rps;
+    }
 };

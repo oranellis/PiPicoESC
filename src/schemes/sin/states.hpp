@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <stdio.h>
+
 #include "pico/stdio.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
@@ -32,19 +34,19 @@ void Init();
 void IdleLoop();
 
 
-void ReadyLoop();
-
-
 void PowerLoop();
 
 
 void RegenLoop();
 
 
-void FaultLoop();
-
-
 void ChargingLoop();
+
+
+void Disabled();
+
+
+void Fault();
 
 
 // Global state variable declaration
