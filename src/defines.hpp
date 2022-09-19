@@ -25,5 +25,5 @@
 
 #define MOTOR_KV // For testing with BLDC's
 #define MAX_V // For testing
-#define MAX_RPS 333
+#define MAX_RPS 400
 #define HZ_V 41.667

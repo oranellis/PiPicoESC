@@ -49,8 +49,7 @@ void Init() {
 
 void IdleLoop() {
     Message message;
-    double field_rps;
-    double v_command;
+    double throttle;
 
     interface.PwmALevel(0);
     interface.PwmBLevel(0);
@@ -62,10 +61,7 @@ void IdleLoop() {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
                     case 't': {
-                        double throttle = 10; // (double) message.data / 1000;
-                        MotorData motor_data = motor_data_from_throttle(throttle);
-                        field_rps = motor_data.field_rps;
-                        v_command = motor_data.v_command;
+                        throttle = message.data; // (double) message.data / 1000;
                     }
                     case 'm': {
                         state = static_cast<States>(message.data);
@@ -80,10 +76,10 @@ void IdleLoop() {
                 break;
             }
         }
-        if (v_command>0) {
+        if (throttle>0) {
             state = States::kPower;
         }
-        else if (v_command<0) {
+        else if (throttle<0) {
             state = States::kRegen;
         }
     }
@@ -93,8 +89,8 @@ void IdleLoop() {
 
 void PowerLoop() {
     Message message;
-    volatile double field_rps;
-    volatile double v_command;
+    volatile double field_rps = 120;
+    volatile double v_command = 0.3;
     volatile int phase_pos;
     volatile int phase_a_level, phase_b_level, phase_c_level;
     volatile int counter = 0; // For debugging
@@ -108,6 +104,9 @@ void PowerLoop() {
                 switch (message.type) {
                     case 't': {
                         double throttle = (double) message.data / 1000;
+                        MotorData motor_data = motor_data_from_throttle(throttle);
+                        field_rps = motor_data.field_rps;
+                        v_command = motor_data.v_command;
                         break;
                     }
                     case 'm': {

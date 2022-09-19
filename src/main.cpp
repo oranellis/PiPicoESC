@@ -73,8 +73,8 @@ int main() {
     sleep_ms(6000);
     gpio_put(LED_PIN, false);
 
-    for (int r = 120; r < 200; r++) {
-        messaging_wrapper('r', static_cast<int32_t>(r*1000));
+    for (double t = 0.3; t < 0.4; t += 0.001) {
+        messaging_wrapper('t', static_cast<int32_t>(t*1000));
         sleep_ms(50);
     }
 
