@@ -13,26 +13,8 @@
 
 #include "states.hpp"
 
-bool core_1_loop_interupt;
-
-// currently the following are constants but must be dynamically assigned
 const int phase_steps = 1; // Can be a multiple of 2 up to 512 to reduce resolution
 const int phase_res = 1536/phase_steps; // Number of steps through one sin wave
-
-
-// Interupt handler for interupting running command loops, not sure how to fire an interupt though so not used yet
-// void core_1_irq_handler() {
-//     if (!queue_is_empty(&command_queue)) {
-//         Message recieved_message;
-//         queue_remove_blocking(&command_queue, &recieved_message);
-//         if (recieved_message.type == 'm') {
-//             state = (States) recieved_message.data;
-//         }
-//         else if (recieved_message.type == 'r') {
-//             field_rps_command = recieved_message.data;
-//         }
-//     }
-// }
 
 
 void Init() {
@@ -66,9 +48,9 @@ void Init() {
 
 
 void IdleLoop() {
+    Message message;
     double field_rps;
     double v_command;
-    Message message;
 
     interface.PwmALevel(0);
     interface.PwmBLevel(0);
@@ -79,15 +61,19 @@ void IdleLoop() {
             while (!queue_is_empty(&command_queue)) {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
-                    case 't':
-                        double throttle = message.data / 1000;
+                    case 't': {
+                        double throttle = 10; // (double) message.data / 1000;
                         MotorData motor_data = motor_data_from_throttle(throttle);
                         field_rps = motor_data.field_rps;
                         v_command = motor_data.v_command;
-                        break;
-                    case 'm':
+                    }
+                    case 'm': {
                         state = static_cast<States>(message.data);
                         break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
             }
             if (state != States::kPower) {
@@ -106,13 +92,13 @@ void IdleLoop() {
 
 
 void PowerLoop() {
+    Message message;
+    volatile double field_rps;
+    volatile double v_command;
     volatile int phase_pos;
     volatile int phase_a_level, phase_b_level, phase_c_level;
     volatile int counter = 0; // For debugging
-    volatile double v_command = 0.3; // Between 0 and 1
-    volatile double field_rps_command = 120; // Flux rotation speed/synchronous speed
 
-    Message message;
 
     // This while loop can be moved to the second core and this core can manage the field speed and voltage based on throttle and current motor rps
     while (1) {
@@ -120,12 +106,14 @@ void PowerLoop() {
             while (!queue_is_empty(&command_queue)) {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
-                    case 't':
-                        double throttle = message.data / 1000;
+                    case 't': {
+                        double throttle = (double) message.data / 1000;
                         break;
-                    case 'm':
+                    }
+                    case 'm': {
                         state = static_cast<States>(message.data);
                         break;
+                    }
                 }
             }
             if (state != States::kPower) {
@@ -153,21 +141,7 @@ void PowerLoop() {
             break;
         }
 
-        sleep_us((1000000/(field_rps_command*phase_res)));
-
-        // Square wave, fixed rpm, implementation
-        // interface.SetAStatePWM('h', v_command);
-        // sleep_us(wait_time);
-        // interface.SetCStatePWM('l', v_command);
-        // sleep_us(wait_time);
-        // interface.SetBStatePWM('h', v_command);
-        // sleep_us(wait_time);
-        // interface.SetAStatePWM('l', v_command);
-        // sleep_us(wait_time);
-        // interface.SetCStatePWM('h', v_command);
-        // sleep_us(wait_time);
-        // interface.SetBStatePWM('l', v_command);
-        // sleep_us(wait_time);
+        sleep_us((1000000/(field_rps*phase_res)));
     }
 }
 
@@ -175,6 +149,7 @@ void PowerLoop() {
 void RegenLoop() {
     int wait_time;
     Message message;
+    double field_rps;
 
     while (1) {
         if (!queue_is_empty(&command_queue)) {
@@ -182,7 +157,7 @@ void RegenLoop() {
                 queue_remove_blocking(&command_queue, &message);
                 switch (message.type) {
                     case 'r':
-                        field_rps_command = (double) message.data / 1000;
+                        field_rps = (double) message.data / 1000;
                         break;
                     case 'm':
                         state = static_cast<States>(message.data);
@@ -193,7 +168,7 @@ void RegenLoop() {
                 break;
             }
         }
-        wait_time = 166667/(field_rps_command);
+        wait_time = 166667/(field_rps);
 
         // TODO Implement regen loop
     }

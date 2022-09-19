@@ -17,6 +17,6 @@
 #include "types.hpp"
 
 
-MotorData motor_data_from_throttle(double throttle) {
-    MotorData return_data(throttle, MAX_V*HZ_V*throttle);
+inline MotorData motor_data_from_throttle(double throttle) {
+    return MotorData(throttle, MAX_RPS*throttle);
 }

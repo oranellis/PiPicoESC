@@ -20,6 +20,8 @@
 #include "pico/util/queue.h"
 
 #include "common/maths.hpp"
+#include "common/types.hpp"
+#include "common/motor.hpp"
 #include "platform/pico/interfacing.hpp"
 #include "platform/pico/core_io.hpp"
 

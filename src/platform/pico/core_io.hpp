@@ -25,24 +25,6 @@ extern queue_t command_queue;
 extern bool core_1_loop_interupt;
 
 
-struct Message {
-    char type;
-    int32_t data;
-
-    // Empty constructor
-    Message() {
-        type = ' ';
-        data = 0;
-    }
-
-    // Populating constructor
-    Message(char init_type, int32_t init_data) {
-        type = init_type;
-        data = init_data;
-    }
-};
-
-
 // Inline helper function to handle sending messages
 inline void messaging_wrapper(char type, int32_t data) {
     Message message(type, data);

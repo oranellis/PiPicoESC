@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include "pico/platform.h"
+
+
 enum class States {
     kFault,
     kInit,
@@ -34,11 +37,33 @@ enum class DriveModes {
 };
 
 
+struct Message {
+    char type;
+    int32_t data;
+
+    // Empty constructor
+    Message() {
+        type = ' ';
+        data = 0;
+    }
+
+    // Populating constructor
+    Message(char init_type, int32_t init_data) {
+        type = init_type;
+        data = init_data;
+    }
+};
+
+
 struct MotorData {
     double v_command;
     double field_rps;
 
-    MotorData() {}
+    MotorData() {
+        v_command = 0;
+        field_rps = 0;
+    }
+
     MotorData(double init_v_command, double init_field_rps) {
         v_command = init_v_command;
         field_rps = init_field_rps;
