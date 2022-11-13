@@ -70,16 +70,17 @@ int main() {
     sleep_ms(4000);
 
     messaging_wrapper(States::kInit);
+    // messaging_wrapper('t',300);
     sleep_ms(6000);
     gpio_put(LED_PIN, false);
 
-    for (double t = 0.3; t < 0.4; t += 0.001) {
-        messaging_wrapper('t', static_cast<int32_t>(t*1000));
-        sleep_ms(50);
+    for (double t = 0.3; t < 1; t += 0.001) {
+        // messaging_wrapper('t', static_cast<int32_t>(t*1000));
+        sleep_ms(2);
     }
 
 
-    messaging_wrapper(States::kFault);
+    // messaging_wrapper(States::kFault);
 
     // =================== Terminal Loop ===================
     // must delay the program termination so the core_1 code can run

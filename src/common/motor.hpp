@@ -18,5 +18,5 @@
 
 
 inline MotorData motor_data_from_throttle(double throttle) {
-    return MotorData(throttle, MAX_RPS*throttle);
+    return MotorData(0.5, MAX_RPS*throttle);
 }
