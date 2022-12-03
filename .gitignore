@@ -1,2 +1,5 @@
 build/*
 .cache/*
+esc/.cache/*
+esc/build
+serial_tester/build

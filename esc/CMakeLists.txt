@@ -9,32 +9,31 @@
 # Authors: Oran Ellis, Karl Hartmann
 # Licence: GPLv3
 
+# set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 cmake_minimum_required(VERSION 3.13)
 
 set(PICO_SDK_PATH $ENV{SDK_PATH}/pico-sdk)
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 include(pico_sdk_import.cmake)
+pico_sdk_init()
 
 project(PiPicoESC)
 
-pico_sdk_init()
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(controller
-    src/main.cpp
-    src/schemes/sin/states.cpp
+
+add_executable(esc
+    main.cpp
+    schemes/sin/states.cpp
 )
 
-target_include_directories(controller PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR})
+target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore)
 
-target_link_libraries(controller pico_stdlib hardware_gpio hardware_pwm pico_multicore)
-
-pico_add_extra_outputs(controller)
-pico_enable_stdio_usb(controller 1)
-pico_enable_stdio_uart(controller 0)
+pico_add_extra_outputs(esc)
+pico_enable_stdio_usb(esc 1)
+pico_enable_stdio_uart(esc 0)
 
 add_custom_target(flash ALL ${CMAKE_SOURCE_DIR}/pi_flash.sh
-    DEPENDS controller)
+    DEPENDS esc)
