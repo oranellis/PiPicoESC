@@ -23,7 +23,7 @@
 #define PIN_C_LOW 0
 #define LED_PIN PICO_DEFAULT_LED_PIN
 
-#define MOTOR_KV // For testing with BLDC's
-#define MAX_V // For testing
-#define MAX_RPS 400
-#define HZ_V 41.667
+// #define MOTOR_KV // For testing with BLDC's
+// #define MAX_V // For testing
+#define MAX_RPS 800
+// #define HZ_V 41.667

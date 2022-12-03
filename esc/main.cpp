@@ -78,7 +78,6 @@ int main() {
     //     sleep_ms(50);
     // }
 
-
     // messaging_wrapper(States::kFault);
 
     // =================== Terminal Loop ===================
