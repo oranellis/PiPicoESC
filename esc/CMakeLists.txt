@@ -9,12 +9,10 @@
 # Authors: Oran Ellis, Karl Hartmann
 # Licence: GPLv3
 
-# set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 cmake_minimum_required(VERSION 3.13)
 
 set(PICO_SDK_PATH $ENV{SDK_PATH}/pico-sdk)
 include(pico_sdk_import.cmake)
-pico_sdk_init()
 
 project(PiPicoESC)
 
@@ -22,13 +20,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+pico_sdk_init()
 
 add_executable(esc
-    main.cpp
-    schemes/sin/states.cpp
+    src/main.cpp
+	src/motor_drive/gatedriver_io.cpp
+	src/motor_drive/foc.cpp
+    src/motor_drive/current_sense.cpp
+    src/uart_io/uart_io.cpp
 )
 
-target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore pico_stdio_uart)
 
 pico_add_extra_outputs(esc)
