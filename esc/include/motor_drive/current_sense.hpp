@@ -12,3 +12,15 @@
 // Licence: GPLv3
 
 #include "common/defines.hpp"
+
+class CurrentSensors {
+
+    public:
+
+    int GetACurrent();
+
+    int GetBCurrent();
+
+    int GetCCurrent();
+
+};

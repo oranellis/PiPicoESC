@@ -13,20 +13,14 @@
 
 #include "motor_drive/current_sense.hpp"
 
-class CurrentSensors {
+int CurrentSensors::GetACurrent() {
+    return 0;
+}
 
+int CurrentSensors::GetBCurrent() {
+    return 0;
+}
 
-
-    int GetACurrent() {
-        return 0;
-    }
-
-    int GetBCurrent() {
-        return 0;
-    }
-
-    int GetCCurrent() {
-        return 0;
-    }
-
-};
+int CurrentSensors::GetCCurrent() {
+    return 0;
+}
