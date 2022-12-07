@@ -25,6 +25,8 @@ class GatedriverIo {
 
     public:
 
+    // Default constructor for GatedriverIo, performs gpio setup and PWM
+    // initialisation
     GatedriverIo();
 
     // Sets the state of the led to on_state
