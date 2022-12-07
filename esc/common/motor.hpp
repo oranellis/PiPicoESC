@@ -4,32 +4,19 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== types.hpp ====
+// ==== motor.hpp ====
 //
-// Header file containing all commonly used types
+// Contains motor specific functions
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
 #pragma once
 
-enum class States {
-    kFault,
-    kInit,
-    kReady,
-    kRegen,
-    kCharging,
-    kIdle,
-    kPower,
-    kTest
-};
+#include "defines.hpp"
+#include "types.hpp"
 
 
-enum class DriveModes {
-    kPark,
-    kReverse,
-    kNeutral,
-    kEco,
-    kDrive,
-    kSpeeeeeed,
-};
+inline MotorData motor_data_from_throttle(double throttle) {
+    return MotorData(0.5, MAX_RPS*throttle);
+}

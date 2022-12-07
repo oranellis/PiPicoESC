@@ -13,15 +13,17 @@
 
 #pragma once
 
+#include <stdio.h>
+
 #include "pico/stdio.h"
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
 #include "common/maths.hpp"
+#include "common/types.hpp"
+#include "common/motor.hpp"
 #include "platform/pico/interfacing.hpp"
 #include "platform/pico/core_io.hpp"
-
-
 
 // void core_1_irq_handler();
 
@@ -32,20 +34,16 @@ void Init();
 void IdleLoop();
 
 
-void ReadyLoop();
-
-
 void PowerLoop();
 
 
 void RegenLoop();
 
 
-void FaultLoop();
-
-
 void ChargingLoop();
 
 
-// Global state variable declaration
-extern States state;
+void Disabled();
+
+
+void Fault();

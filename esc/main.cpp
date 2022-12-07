@@ -26,7 +26,7 @@
 
 // Global variable declaration
 States state; // From extern in states.hpp
-Interface interface; // From extern in interface.hpp
+Interface * interface = new Interface(); // From extern in interface.hpp
 queue_t command_queue; // From extern in core_io.hpp
 
 
@@ -47,14 +47,14 @@ void core_1_entry() {
             }
         }
         switch (state) {
-            case States::kFault: FaultLoop(); break;
+            case States::kFault: Fault(); break;
             case States::kInit: Init(); break;
             case States::kIdle: IdleLoop(); break;
-            case States::kReady: ReadyLoop(); break;
+            case States::kDisabled: Disabled(); break;
             case States::kPower: PowerLoop(); break;
             case States::kRegen: RegenLoop(); break;
             case States::kCharging: ChargingLoop(); break;
-            default: FaultLoop(); break;
+            default: Fault(); break;
         }
     }
 }
@@ -67,27 +67,14 @@ int main() {
     multicore_launch_core1(core_1_entry);
 
     messaging_wrapper(States::kFault);
-    sleep_ms(4000);
 
-    messaging_wrapper(States::kInit);
-    sleep_ms(6000);
-    gpio_put(LED_PIN, false);
-
-    for (int r = 120; r < 200; r++) {
-        messaging_wrapper('r', static_cast<uint32_t>(r*1000));
-        sleep_ms(50);
-    }
-
-
-    messaging_wrapper(States::kFault);
+    // Initialise uart comms
+    stdio_uart_init();
 
     // =================== Terminal Loop ===================
     // must delay the program termination so the core_1 code can run
     while (true) {
-        sleep_ms(250);
-        gpio_put(LED_PIN, true);
-        sleep_ms(250);
-        gpio_put(LED_PIN, false);
+        return 0;
     }
 
     return 0;
