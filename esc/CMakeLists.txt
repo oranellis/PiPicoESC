@@ -29,7 +29,7 @@ add_executable(esc
 )
 
 target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR})
-target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore)
+target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore pico_stdio_uart)
 
 pico_add_extra_outputs(esc)
 pico_enable_stdio_usb(esc 1)

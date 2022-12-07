@@ -25,8 +25,6 @@
 #include "platform/pico/interfacing.hpp"
 #include "platform/pico/core_io.hpp"
 
-
-
 // void core_1_irq_handler();
 
 
@@ -49,7 +47,3 @@ void Disabled();
 
 
 void Fault();
-
-
-// Global state variable declaration
-extern States state;

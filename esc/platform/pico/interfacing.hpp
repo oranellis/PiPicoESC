@@ -123,4 +123,4 @@ class Interface {
 
 
 // Global interface declaration
-extern Interface interface;
+// extern Interface interface;
