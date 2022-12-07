@@ -6,7 +6,7 @@
 //
 // ==== defines.hpp ====
 //
-// Header containing all user defined constants for use by the ESC
+// All user defined constants used by the ESC
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3

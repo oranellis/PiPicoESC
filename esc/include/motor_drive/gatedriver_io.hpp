@@ -1,3 +1,16 @@
+//  ____  _ ____  _           _____ ____   ____
+// |  _ \(_)  _ \(_) ___ ___ | ____/ ___| / ___|
+// | |_) | | |_) | |/ __/ _ \|  _| \___ \| |
+// |  __/| |  __/| | (_| (_) | |___ ___) | |___
+// |_|   |_|_|   |_|\___\___/|_____|____/ \____|
+//
+// ==== gatedriver_io.hpp ====
+//
+// Contains wrapper functions for controlling the gate driver IC
+//
+// Authors: Oran Ellis, Karl Hartmann
+// Licence: GPLv3
+
 #pragma once
 
 #include "boards/pico.h"
@@ -7,6 +20,7 @@
 
 #include "common/defines.hpp"
 
+// Contains wrapper functions for controlling the gate driver IC
 class GatedriverIo {
 
     int channel_a_high = pwm_gpio_to_channel(PIN_A_HIGH);
