@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "common/defines.hpp"
+#include "defines.hpp"
 #include "motor_drive/gatedriver_io.hpp"
 #include "motor_drive/foc.hpp"
 

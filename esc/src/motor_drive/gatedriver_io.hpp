@@ -18,7 +18,7 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-#include "common/defines.hpp"
+#include "defines.hpp"
 
 // Contains wrapper functions for controlling the gate driver IC
 class GatedriverIo {

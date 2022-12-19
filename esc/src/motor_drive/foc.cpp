@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "motor_drive/foc.hpp"
+#include "foc.hpp"
 
 void Foc::Core1DriveMode(GatedriverIo* io, int* command) {
     // TODO FOC magic on a seperate core

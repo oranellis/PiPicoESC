@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "motor_drive/current_sense.hpp"
+#include "current_sense.hpp"
 
 int CurrentSensors::GetACurrent() {
     return 0;

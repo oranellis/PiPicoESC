@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "common/defines.hpp"
+#include "defines.hpp"
 
 class CurrentSensors {
 

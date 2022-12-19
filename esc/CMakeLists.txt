@@ -30,7 +30,7 @@ add_executable(esc
     src/uart_io/uart_io.cpp
 )
 
-target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore pico_stdio_uart)
 
 pico_add_extra_outputs(esc)
