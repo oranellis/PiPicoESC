@@ -22,6 +22,7 @@ int main() {
     Foc* foc = new Foc(gatedriverIo);
 
     // TODO the logic
+    gatedriverIo->SetLedState(true);
 
     // Cleanup
     delete foc;

@@ -23,13 +23,10 @@ class Foc {
     // Local copy of the GatedriverIo pointer, used for commanding the gates
     GatedriverIo* io;
 
-    // Function to be run on core 1 for motor drive
-    void Core1DriveMode(GatedriverIo* io, int* command);
-
     public:
 
     // Default constructor for Foc, requires an gatedriver io handler
     Foc(GatedriverIo* initIo): io(initIo) {}
 
-    int DriveMode(int* command);
+    void DriveMode(int* command);
 };

@@ -43,18 +43,21 @@ class GatedriverIo {
     // initialisation
     GatedriverIo();
 
-    // Sets the state of the led to on_state
-    void led(bool on_state);
+    // Gets the motor rotational velocity in 1024ths of a radian per second
+    float GetRadiansPerSecond();
+
+    // Sets the state of the onboardled to on_state
+    void SetLedState(bool on_state);
 
     // Sets pwm output level for the gate driver on either the high side
     // (positive level) or the low side (negative level)
-    void PwmALevel(int level);
+    void SetPwmALevel(int level);
 
     // Sets pwm output level for the gate driver on either the high side
     // (positive level) or the low side (negative level)
-    void PwmBLevel(int level);
+    void SetPwmBLevel(int level);
 
     // Sets pwm output level for the gate driver on either the high side
     // (positive level) or the low side (negative level)
-    void PwmCLevel(int level);
+    void SetPwmCLevel(int level);
 };

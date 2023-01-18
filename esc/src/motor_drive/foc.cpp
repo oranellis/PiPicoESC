@@ -13,12 +13,56 @@
 
 #include "foc.hpp"
 
-void Foc::Core1DriveMode(GatedriverIo* io, int* command) {
-    // TODO FOC magic on a seperate core
+bool loopingState = true;
 
-}
+void Foc::DriveMode(int* command) {
 
-int Foc::DriveMode(int* command) {
-    Core1DriveMode(io, command);
-    return 0;
+/*
+
+    Speed measurement ->
+    Position generator ->
+    Sin-Cos lookup *1
+
+    current measurements ->
+    clarke transform *2
+
+    Direct current PI loop {
+    (needs to be 0)
+    }
+
+    target current ->
+    Qradrature current PI loop {
+    }
+
+    inverse park transform ->
+    (generates the sin waves)
+    space vector modulation
+    (turns it into PWM values for the phases)
+
+*/
+    unsigned int loopTimestepMicroSeconds = 100;
+
+    int motorPositionRads = 0;
+
+    while (loopingState) {
+
+        absolute_time_t loopStartTime = get_absolute_time();
+
+        int motorRadiansPerSecond = io->GetRadiansPerSecond();
+
+        motorPositionRads = (motorPositionRads + motorRadiansPerSecond * loopTimestepMicroSeconds);
+
+
+
+
+// ---------------------------------------------------------------------------
+        if (get_absolute_time() > loopStartTime + loopTimestepMicroSeconds) {
+
+            loopingState = false;
+
+        }
+
+        sleep_until(loopStartTime + loopTimestepMicroSeconds);
+
+    }
 }

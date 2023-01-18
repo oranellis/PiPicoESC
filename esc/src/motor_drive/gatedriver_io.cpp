@@ -55,16 +55,20 @@ GatedriverIo::GatedriverIo() {
     pwm_set_enabled(pwm_gpio_to_slice_num(PIN_C_LOW), true);
 }
 
-void GatedriverIo::led(bool on_state) {
-    if (on_state == true) {
-        gpio_put(LED_PIN, true);
+float GatedriverIo::GetRadiansPerSecond() {
+    return 0;
+}
+
+void GatedriverIo::SetLedState(bool on_state) {
+    if (on_state == false) {
+        gpio_put(LED_PIN, false);
     }
     else {
-        gpio_put(LED_PIN, false);
+        gpio_put(LED_PIN, true);
     }
 }
 
-void GatedriverIo::PwmALevel(int level) {
+void GatedriverIo::SetPwmALevel(int level) {
     if (level > 0) {
         pwm_set_chan_level(slice_a_low, channel_a_low, 0);
         pwm_set_chan_level(slice_a_high, channel_a_high, MIN(level, 4095));
@@ -75,7 +79,7 @@ void GatedriverIo::PwmALevel(int level) {
     }
 }
 
-void GatedriverIo::PwmBLevel(int level) {
+void GatedriverIo::SetPwmBLevel(int level) {
     if (level > 0) {
         pwm_set_chan_level(slice_b_high, channel_b_high, 0);
         pwm_set_chan_level(slice_b_low, channel_b_low, MIN(level, 4095));
@@ -86,7 +90,7 @@ void GatedriverIo::PwmBLevel(int level) {
     }
 }
 
-void GatedriverIo::PwmCLevel(int level) {
+void GatedriverIo::SetPwmCLevel(int level) {
     if (level > 0) {
         pwm_set_chan_level(slice_c_low, channel_c_low, 0);
         pwm_set_chan_level(slice_c_high, channel_c_high, MIN(level, 4095));
