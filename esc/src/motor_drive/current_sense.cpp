@@ -13,14 +13,15 @@
 
 #include "current_sense.hpp"
 
-int CurrentSensors::GetACurrent() {
+int CurrentSensors::GetPhaseACurrentMilliAmps() {
     return 0;
 }
 
-int CurrentSensors::GetBCurrent() {
+int CurrentSensors::GetPhaseBCurrentMilliAmps() {
     return 0;
 }
 
-int CurrentSensors::GetCCurrent() {
+int CurrentSensors::GetPhaseCCurrentMilliAmps() {
     return 0;
 }
+

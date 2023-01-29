@@ -17,10 +17,11 @@ class CurrentSensors {
 
     public:
 
-    int GetACurrent();
+    int GetPhaseACurrentMilliAmps();
 
-    int GetBCurrent();
+    int GetPhaseBCurrentMilliAmps();
 
-    int GetCCurrent();
+    int GetPhaseCCurrentMilliAmps();
+
 
 };

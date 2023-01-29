@@ -42,15 +42,26 @@ void Foc::DriveMode(int* command) {
 */
     unsigned int loopTimestepMicroSeconds = 100;
 
-    int motorPositionRads = 0;
+    int motorPositionMilliRads = 0;
 
     while (loopingState) {
 
         absolute_time_t loopStartTime = get_absolute_time();
 
-        int motorRadiansPerSecond = io->GetRadiansPerSecond();
+        int motorMilliRadiansPerSecond = io->GetMilliRadiansPerSecond();
 
-        motorPositionRads = (motorPositionRads + motorRadiansPerSecond * loopTimestepMicroSeconds);
+        motorPositionMilliRads = (motorPositionMilliRads + (motorMilliRadiansPerSecond * loopTimestepMicroSeconds) / 1000000);
+
+        int phaseACurrentMilliAmps = cs->GetPhaseACurrentMilliAmps();
+        int phaseBCurrentMilliAmps = cs->GetPhaseBCurrentMilliAmps();
+        int phaseCCurrentMilliAmps = cs->GetPhaseCCurrentMilliAmps();
+
+        // Clarke transform
+
+
+
+
+
 
 
 

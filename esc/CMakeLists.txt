@@ -22,13 +22,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 pico_sdk_init()
 
-add_executable(esc
-    src/main.cpp
-	src/motor_drive/gatedriver_io.cpp
-	src/motor_drive/foc.cpp
-    src/motor_drive/current_sense.cpp
-    src/uart_io/uart_io.cpp
-)
+add_executable(esc)
+add_subdirectory(src)
 
 target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore pico_stdio_uart)

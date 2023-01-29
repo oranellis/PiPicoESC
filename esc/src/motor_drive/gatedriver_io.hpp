@@ -39,14 +39,8 @@ class GatedriverIo {
 
     public:
 
-    // Default constructor for GatedriverIo, performs gpio setup and PWM
-    // initialisation
     GatedriverIo();
 
-    // Gets the motor rotational velocity in 1024ths of a radian per second
-    float GetRadiansPerSecond();
-
-    // Sets the state of the onboardled to on_state
     void SetLedState(bool on_state);
 
     // Sets pwm output level for the gate driver on either the high side

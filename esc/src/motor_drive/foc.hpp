@@ -16,12 +16,15 @@
 #include "pico/stdlib.h"
 
 #include "motor_drive/gatedriver_io.hpp"
+#include "motor_drive/current_sense.hpp"
 
 class Foc {
     private:
 
     // Local copy of the GatedriverIo pointer, used for commanding the gates
-    GatedriverIo* io;
+    GatedriverIo* io = new GatedriverIo();
+    CurrentSensors* cs = new CurrentSensors();
+
 
     public:
 

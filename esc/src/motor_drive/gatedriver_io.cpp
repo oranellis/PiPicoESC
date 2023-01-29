@@ -55,7 +55,7 @@ GatedriverIo::GatedriverIo() {
     pwm_set_enabled(pwm_gpio_to_slice_num(PIN_C_LOW), true);
 }
 
-float GatedriverIo::GetRadiansPerSecond() {
+int GatedriverIo::GetMilliRadiansPerSecond() {
     return 0;
 }
 
