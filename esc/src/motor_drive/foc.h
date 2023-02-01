@@ -15,6 +15,7 @@
 
 #include "pico/stdlib.h"
 
+#include "defines.h"
 #include "motor_drive/gatedriver_io.h"
 #include "motor_drive/current_sense.h"
 #include "motor_drive/rpm_sense.h"
@@ -22,7 +23,6 @@
 class Foc {
     private:
 
-    // Local copy of the GatedriverIo pointer, used for commanding the gates
     GatedriverIo* gates_ptr;
     CurrentSensors* cs_ptr;
     RpmSensors* rs_ptr;
@@ -30,19 +30,9 @@ class Foc {
 
     public:
 
-    // Default constructor for Foc, requires an gatedriver io handler
-    Foc() {
-        gates_ptr = new GatedriverIo();
-        cs_ptr = new CurrentSensors();
-        rs_ptr = new RpmSensors();
-    }
+    Foc();
 
-    // Class destructor
-    ~Foc() {
-        delete gates_ptr;
-        delete cs_ptr;
-        delete rs_ptr;
-    }
+    ~Foc();
 
     GatedriverIo* GetGatedriverIoPtr();
 
