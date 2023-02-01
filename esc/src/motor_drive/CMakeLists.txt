@@ -1,5 +1,5 @@
-target_sources(esc
-	motor_drive/foc.cpp
-	motor_drive/gatedriver_io.cpp
-    motor_drive/current_sense.cpp
+target_sources(esc PUBLIC
+	foc.cpp
+	gatedriver_io.cpp
+	current_sense.cpp
 	)

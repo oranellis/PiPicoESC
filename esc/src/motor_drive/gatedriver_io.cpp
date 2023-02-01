@@ -55,10 +55,6 @@ GatedriverIo::GatedriverIo() {
     pwm_set_enabled(pwm_gpio_to_slice_num(PIN_C_LOW), true);
 }
 
-int GatedriverIo::GetMilliRadiansPerSecond() {
-    return 0;
-}
-
 void GatedriverIo::SetLedState(bool on_state) {
     if (on_state == false) {
         gpio_put(LED_PIN, false);

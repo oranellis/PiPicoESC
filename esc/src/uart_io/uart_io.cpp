@@ -16,3 +16,7 @@
 UartIo::UartIo() {
 
 }
+
+UartIo::~UartIo() {
+
+}

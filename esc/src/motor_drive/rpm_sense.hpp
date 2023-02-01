@@ -1,21 +1,19 @@
-// ____  _ ____  _           _____ ____   ____
+//  ____  _ ____  _           _____ ____   ____
 // |  _ \(_)  _ \(_) ___ ___ | ____/ ___| / ___|
 // | |_) | | |_) | |/ __/ _ \|  _| \___ \| |
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== main.cpp ====
+// ==== rpm_sense.hpp ====
 //
-// For serial control of the ESC
-//
+// Rpm sensing header file
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "main.hpp"
+class RpmSensors {
 
-int main(int argc, char** argv) {
+    public:
 
-    return 0;
-
-}
+    int GetMilliRadiansPerSecond();
+};

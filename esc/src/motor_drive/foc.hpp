@@ -17,19 +17,34 @@
 
 #include "motor_drive/gatedriver_io.hpp"
 #include "motor_drive/current_sense.hpp"
+#include "motor_drive/rpm_sense.hpp"
 
 class Foc {
     private:
 
     // Local copy of the GatedriverIo pointer, used for commanding the gates
-    GatedriverIo* io = new GatedriverIo();
-    CurrentSensors* cs = new CurrentSensors();
+    GatedriverIo* gates_ptr;
+    CurrentSensors* cs_ptr;
+    RpmSensors* rs_ptr;
 
 
     public:
 
     // Default constructor for Foc, requires an gatedriver io handler
-    Foc(GatedriverIo* initIo): io(initIo) {}
+    Foc() {
+        gates_ptr = new GatedriverIo();
+        cs_ptr = new CurrentSensors();
+        rs_ptr = new RpmSensors();
+    }
+
+    // Class destructor
+    ~Foc() {
+        delete gates_ptr;
+        delete cs_ptr;
+        delete rs_ptr;
+    }
+
+    GatedriverIo* GetGatedriverIoPtr();
 
     void DriveMode(int* command);
 };

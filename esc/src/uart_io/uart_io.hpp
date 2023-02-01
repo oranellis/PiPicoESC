@@ -15,4 +15,6 @@ class UartIo {
     public:
 
     UartIo();
+
+    ~UartIo();
 };

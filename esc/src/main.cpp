@@ -14,19 +14,19 @@
 #include "defines.hpp"
 #include "motor_drive/gatedriver_io.hpp"
 #include "motor_drive/foc.hpp"
+#include "uart_io/uart_io.hpp"
 
 int main() {
 
     // Class initialisation
-    GatedriverIo* gatedriverIo = new GatedriverIo(); // Runs gatedriver power init sequence
-    Foc* foc = new Foc(gatedriverIo);
+    Foc* foc_ptr = new Foc();
+    UartIo* uart_io_ptr = new UartIo();
 
     // TODO the logic
-    gatedriverIo->SetLedState(true);
+    foc_ptr->GetGatedriverIoPtr()->SetLedState(true);
 
     // Cleanup
-    delete foc;
-    delete gatedriverIo;
+    delete foc_ptr;
 
     return 0;
 
