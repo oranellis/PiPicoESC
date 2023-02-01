@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== foc.hpp ====
+// ==== foc.h ====
 //
 // Field Oriented Control algorithms
 //
@@ -15,9 +15,9 @@
 
 #include "pico/stdlib.h"
 
-#include "motor_drive/gatedriver_io.hpp"
-#include "motor_drive/current_sense.hpp"
-#include "motor_drive/rpm_sense.hpp"
+#include "motor_drive/gatedriver_io.h"
+#include "motor_drive/current_sense.h"
+#include "motor_drive/rpm_sense.h"
 
 class Foc {
     private:

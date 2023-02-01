@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "foc.hpp"
+#include "foc.h"
 
 GatedriverIo* Foc::GetGatedriverIoPtr() {
     return gates_ptr;

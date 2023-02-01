@@ -11,10 +11,10 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "defines.hpp"
-#include "motor_drive/gatedriver_io.hpp"
-#include "motor_drive/foc.hpp"
-#include "uart_io/uart_io.hpp"
+#include "defines.h"
+#include "motor_drive/gatedriver_io.h"
+#include "motor_drive/foc.h"
+#include "uart_io/uart_io.h"
 
 int main() {
 

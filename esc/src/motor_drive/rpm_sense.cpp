@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "rpm_sense.hpp"
+#include "rpm_sense.h"
 
 int RpmSensors::GetMilliRadiansPerSecond() {
 

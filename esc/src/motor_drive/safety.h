@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== safety.hpp ====
+// ==== safety.h ====
 //
 // Contains check functions to ensure the ESC is functioning properly
 //

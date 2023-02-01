@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== defines.hpp ====
+// ==== defines.h ====
 //
 // All user defined constants used by the ESC
 //

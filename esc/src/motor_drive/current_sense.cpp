@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "current_sense.hpp"
+#include "current_sense.h"
 
 int CurrentSensors::GetPhaseACurrentMilliAmps() {
     return 0;

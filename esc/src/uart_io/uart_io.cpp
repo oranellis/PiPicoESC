@@ -11,7 +11,7 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "uart_io/uart_io.hpp"
+#include "uart_io/uart_io.h"
 
 UartIo::UartIo() {
 

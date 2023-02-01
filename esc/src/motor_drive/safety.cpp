@@ -11,4 +11,4 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "motor_drive/safety.hpp"
+#include "motor_drive/safety.h"

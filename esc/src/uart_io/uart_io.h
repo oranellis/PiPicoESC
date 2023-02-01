@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== uart_io.hpp ====
+// ==== uart_io.h ====
 //
 // Messaging wrappers for uart communication and control
 //

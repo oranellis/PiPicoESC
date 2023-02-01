@@ -4,7 +4,7 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== gatedriver_io.hpp ====
+// ==== gatedriver_io.h ====
 //
 // Contains wrapper functions for controlling the gate driver IC
 //
@@ -18,7 +18,7 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-#include "defines.hpp"
+#include "defines.h"
 
 // Contains wrapper functions for controlling the gate driver IC
 class GatedriverIo {
