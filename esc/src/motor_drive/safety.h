@@ -11,3 +11,17 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
+#pragma once
+
+#define MOTOR_TEMP_THRESHOLD 343000;
+#define MOTOR_TEMP_LIMIT 363000;
+#define IGBT_TEMP_THRESHOLD 343000;
+#define IGBT_TEMP_LIMIT 373000;
+
+class Safety {
+
+    private:
+
+    motor_temp = 293000; // thousanths of a degree kelvin
+    igbt_temp = 293000; // thousanths of a degree kelvin
+};

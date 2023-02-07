@@ -16,12 +16,15 @@
 #include "pico/stdlib.h"
 
 #include "defines.h"
+#include "control_logic/motor_command.h"
 #include "motor_drive/gatedriver_io.h"
 #include "motor_drive/current_sense.h"
 #include "motor_drive/rpm_sense.h"
 
 class Foc {
     private:
+
+    MotorCommand* mc_ptr;
 
     GatedriverIo* gates_ptr;
     CurrentSensors* cs_ptr;
@@ -30,7 +33,7 @@ class Foc {
 
     public:
 
-    Foc();
+    Foc(MotorCommand* motor_command_ptr_init);
 
     ~Foc();
 

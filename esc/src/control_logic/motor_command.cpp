@@ -4,11 +4,19 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== control.h ====
+// ==== motor_command.cpp ====
 //
-// Rpm sensing
+// Control of the FOC algorithm based on user inputs and system limits
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
+#include "control_logic/motor_command.h"
 
+MotorCommand::MotorCommand() {}
+
+MotorCommand::~MotorCommand() {}
+
+void MotorCommand::SetRpm(int throttle) {
+
+}

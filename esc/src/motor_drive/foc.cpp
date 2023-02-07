@@ -17,19 +17,27 @@
 #define inv_sqrt_3 0.5773502692
 #define inv_sqrt_2 0.7071067811
 
-Foc::Foc() {
+#define kp_i 0.04
+#define ki_i 0.08
+
+Foc::Foc(MotorCommand* motor_command_ptr_init) {
+
+    mc_ptr = motor_command_ptr_init;
+
     gates_ptr = new GatedriverIo();
     cs_ptr = new CurrentSensors();
     rs_ptr = new RpmSensors();
 }
 
 Foc::~Foc() {
+
     delete gates_ptr;
     delete cs_ptr;
     delete rs_ptr;
 }
 
 GatedriverIo* Foc::GetGatedriverIoPtr() {
+
     return gates_ptr;
 }
 
@@ -64,6 +72,9 @@ void Foc::DriveMode(int* command) {
 
     bool loopingState = true;
 
+    int q_integration_cummulative = 0;
+    int d_integration_cummulative = 0;
+
     while (loopingState) {
 
         absolute_time_t loopStartTime = get_absolute_time();
@@ -72,24 +83,35 @@ void Foc::DriveMode(int* command) {
 
         motorPositionMilliRads = (motorPositionMilliRads + (motorMilliRadiansPerSecond * loopTimestepMicroSeconds) / 1000000);
 
-        int aCurr = cs_ptr->GetPhaseACurrentMilliAmps();
-        int bCurr = cs_ptr->GetPhaseBCurrentMilliAmps();
-        int cCurr = cs_ptr->GetPhaseCCurrentMilliAmps();
+        int a_current = cs_ptr->GetPhaseACurrentMilliAmps();
+        int b_current = cs_ptr->GetPhaseBCurrentMilliAmps();
+        int c_current = cs_ptr->GetPhaseCCurrentMilliAmps();
 
         // Clarke transform
         // Could be changed to int operation for reduced accuracy but much faster speed
-        int X = (2 * aCurr - bCurr - cCurr) * inv_sqrt_6;
-        int Y = (bCurr - cCurr) * inv_sqrt_2;
+        int x_current = (2 * a_current - b_current - c_current) * inv_sqrt_6;
+        int y_current = (b_current - c_current) * inv_sqrt_2;
         // int Z = (aCurr + bCurr + cCurr) * inv_sqrt_3;
 
         // Park transform
-        int cosTh = fcos(fieldPositionMilliRads);
-        int sinTh = fsin(fieldPositionMilliRads);
+        int cos_theta = fcos(fieldPositionMilliRads);
+        int sin_theta = fsin(fieldPositionMilliRads);
 
-        int D = (cosTh * X + sinTh * Y) / 4095;
-        int Q = (cosTh * Y - sinTh * X) / 4095;
+        int d_current = (cos_theta * x_current + sin_theta * y_current) / 4095;
+        int q_current = (cos_theta * y_current - sin_theta * x_current) / 4095;
 
-        int target_current = GetTargetCurrent();
+        int d_setpoint = mc_ptr->GetDCurrent();
+        int q_setpoint = mc_ptr->GetQCurrent();
+
+        // Begin PI loops
+
+        int d_error = d_current - d_setpoint;
+        int q_error = q_current - q_setpoint;
+
+        d_integration_cummulative += d_error * timestep;
+
+        int d_command = d_error * kp_i + ;
+        int q_command = q_error * kp_i;
 
 // ---------------------------------------------------------------------------
         if (get_absolute_time() > loopStartTime + loopTimestepMicroSeconds) {
