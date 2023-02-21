@@ -65,60 +65,62 @@ void Foc::DriveMode(int* command) {
     (turns it into PWM values for the phases)
 */
 
-    unsigned int loopTimestepMicroSeconds = 100;
+    float loop_timestep = 0.0001;
 
-    int motorPositionMilliRads = 0;
-    int fieldPositionMilliRads = 0;
+    float motor_position_rads = 0;
+    float field_position_rads = 0;
 
-    bool loopingState = true;
+    bool looping_state = true;
 
-    int q_integration_cummulative = 0;
-    int d_integration_cummulative = 0;
+    float d_integration_cummulative = 0;
+    float q_integration_cummulative = 0;
 
-    while (loopingState) {
+    while (looping_state) {
 
-        absolute_time_t loopStartTime = get_absolute_time();
+        absolute_time_t loop_start_time = get_absolute_time();
 
-        int motorMilliRadiansPerSecond = rs_ptr->GetMilliRadiansPerSecond();
+        float motor_radians_per_second = rs_ptr->GetMilliRadiansPerSecond();
 
-        motorPositionMilliRads = (motorPositionMilliRads + (motorMilliRadiansPerSecond * loopTimestepMicroSeconds) / 1000000);
+        motor_position_rads = (motor_position_rads + \
+                               (motor_radians_per_second * loop_timestep) \
+                               / 1000000);
 
-        int a_current = cs_ptr->GetPhaseACurrentMilliAmps();
-        int b_current = cs_ptr->GetPhaseBCurrentMilliAmps();
-        int c_current = cs_ptr->GetPhaseCCurrentMilliAmps();
+        float a_current = (float)cs_ptr->GetPhaseACurrentMilliAmps()/1000;
+        float b_current = (float)cs_ptr->GetPhaseBCurrentMilliAmps()/1000;
+        float c_current = (float)cs_ptr->GetPhaseCCurrentMilliAmps()/1000;
 
         // Clarke transform
-        // Could be changed to int operation for reduced accuracy but much faster speed
-        int x_current = (2 * a_current - b_current - c_current) * inv_sqrt_6;
-        int y_current = (b_current - c_current) * inv_sqrt_2;
+        float x_current = (2 * a_current - b_current - c_current) * inv_sqrt_6;
+        float y_current = (b_current - c_current) * inv_sqrt_2;
         // int Z = (aCurr + bCurr + cCurr) * inv_sqrt_3;
 
         // Park transform
-        int cos_theta = fcos(fieldPositionMilliRads);
-        int sin_theta = fsin(fieldPositionMilliRads);
+        float cos_theta = fcos((int)roundf(field_position_rads * 1000));
+        float sin_theta = fsin((int)roundf(field_position_rads * 1000));
 
-        int d_current = (cos_theta * x_current + sin_theta * y_current) / 4095;
-        int q_current = (cos_theta * y_current - sin_theta * x_current) / 4095;
+        float d_current = (cos_theta * x_current + sin_theta * y_current) / 4095;
+        float q_current = (cos_theta * y_current - sin_theta * x_current) / 4095;
 
-        int d_setpoint = mc_ptr->GetDCurrent();
-        int q_setpoint = mc_ptr->GetQCurrent();
+        float d_setpoint = mc_ptr->GetDCurrent();
+        float q_setpoint = mc_ptr->GetQCurrent();
 
         // Begin PI loops
 
-        int d_error = d_current - d_setpoint;
-        int q_error = q_current - q_setpoint;
+        float d_error = d_current - d_setpoint;
+        float q_error = q_current - q_setpoint;
 
-        d_integration_cummulative += d_error * timestep;
+        d_integration_cummulative += d_error * loop_timestep; // Unbounded
+        q_integration_cummulative += q_error * loop_timestep; // Unbounded
 
-        int d_command = d_error * kp_i + ;
-        int q_command = q_error * kp_i;
+        float d_command = d_error * kp_i + d_integration_cummulative * ki_i;
+        float q_command = q_error * kp_i + q_integration_cummulative * ki_i;
 
 // ---------------------------------------------------------------------------
-        if (get_absolute_time() > loopStartTime + loopTimestepMicroSeconds) {
+        if (get_absolute_time() > loop_start_time + loop_timestep) {
 
-            loopingState = false;
+            looping_state = false;
         }
 
-        sleep_until(loopStartTime + loopTimestepMicroSeconds);
+        sleep_until(loop_start_time + loop_timestep);
     }
 }

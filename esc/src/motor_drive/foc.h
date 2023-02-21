@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include <stdio.h>
+
+#include "pico/float.h"
 #include "pico/stdlib.h"
 
 #include "defines.h"
@@ -25,7 +28,6 @@ class Foc {
     private:
 
     MotorCommand* mc_ptr;
-
     GatedriverIo* gates_ptr;
     CurrentSensors* cs_ptr;
     RpmSensors* rs_ptr;
