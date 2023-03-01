@@ -22,6 +22,6 @@ class Safety {
 
     private:
 
-    motor_temp = 293000; // thousanths of a degree kelvin
-    igbt_temp = 293000; // thousanths of a degree kelvin
+    int motor_temp = 293000; // thousanths of a degree kelvin
+    int igbt_temp = 293000; // thousanths of a degree kelvin
 };
