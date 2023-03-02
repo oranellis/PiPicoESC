@@ -16,6 +16,7 @@
 #define inv_sqrt_6 0.4082482904
 #define inv_sqrt_3 0.5773502692
 #define inv_sqrt_2 0.7071067811
+#define sqrt_2_over_3 0.81649658093
 
 #define kp_i 0.04
 #define ki_i 0.0 // Off for now
@@ -118,9 +119,11 @@ void Foc::DriveMode(int* command) {
         float x_command = cos_theta * d_command - sin_theta * q_command;
         float y_command = sin_theta * d_command + cos_theta * q_command;
 
-        float a_command;
-        float b_command;
-
+        // Inverse clarke transform
+        float a_command = sqrt_2_over_3 * x_command;
+        float b_command = -inv_sqrt_6 * x_command;
+        float c_command = b_command - inv_sqrt_2 * y_command;
+        b_command += inv_sqrt_2 * y_command;
 
 // ---------------------------------------------------------------------------
         if (get_absolute_time() > loop_start_time + loop_timestep) {
