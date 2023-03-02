@@ -17,6 +17,12 @@ MotorCommand::MotorCommand() {}
 
 MotorCommand::~MotorCommand() {}
 
-void MotorCommand::SetRpm(int throttle) {
+void MotorCommand::SetRpm(int throttle) {}
 
+int MotorCommand::GetDCurrentSetpoint() {
+    return 0;
+}
+
+int MotorCommand::GetQCurrentSetpoint() {
+    return 1; // 1A target current
 }

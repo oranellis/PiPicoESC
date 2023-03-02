@@ -42,7 +42,7 @@ class MotorCommand {
 
     void SetRegen(int regen_throttle);
 
-    int GetQCurrent();
+    int GetQCurrentSetpoint();
 
-    int GetDCurrent();
+    int GetDCurrentSetpoint();
 };

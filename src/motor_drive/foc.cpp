@@ -18,7 +18,7 @@
 #define inv_sqrt_2 0.7071067811
 
 #define kp_i 0.04
-#define ki_i 0.08
+#define ki_i 0.0 // Off for now
 
 Foc::Foc(MotorCommand* motor_command_ptr_init) {
 
@@ -92,7 +92,7 @@ void Foc::DriveMode(int* command) {
         // Clarke transform
         float x_current = (2 * a_current - b_current - c_current) * inv_sqrt_6;
         float y_current = (b_current - c_current) * inv_sqrt_2;
-        // int Z = (aCurr + bCurr + cCurr) * inv_sqrt_3;
+        // float z_current = (a_current + b_current + c_current) * inv_sqrt_3;
 
         // Park transform
         float cos_theta = fcos((int)roundf(field_position_rads * 1000));
@@ -101,11 +101,10 @@ void Foc::DriveMode(int* command) {
         float d_current = (cos_theta * x_current + sin_theta * y_current) / 4095;
         float q_current = (cos_theta * y_current - sin_theta * x_current) / 4095;
 
-        float d_setpoint = mc_ptr->GetDCurrent();
-        float q_setpoint = mc_ptr->GetQCurrent();
+        float d_setpoint = mc_ptr->GetDCurrentSetpoint();
+        float q_setpoint = mc_ptr->GetQCurrentSetpoint();
 
-        // Begin PI loops
-
+        // PI loops
         float d_error = d_current - d_setpoint;
         float q_error = q_current - q_setpoint;
 
@@ -114,6 +113,14 @@ void Foc::DriveMode(int* command) {
 
         float d_command = d_error * kp_i + d_integration_cummulative * ki_i;
         float q_command = q_error * kp_i + q_integration_cummulative * ki_i;
+
+        // Inverse park transform
+        float x_command = cos_theta * d_command - sin_theta * q_command;
+        float y_command = sin_theta * d_command + cos_theta * q_command;
+
+        float a_command;
+        float b_command;
+
 
 // ---------------------------------------------------------------------------
         if (get_absolute_time() > loop_start_time + loop_timestep) {
