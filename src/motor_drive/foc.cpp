@@ -118,8 +118,9 @@ void Foc::DriveMode(int* command) {
         float x_command = cos_theta * d_command - sin_theta * q_command;
         float y_command = sin_theta * d_command + cos_theta * q_command;
 
-        float a_command;
+        float a_command = x_command;
         float b_command;
+        float c_command;
 
 
 // ---------------------------------------------------------------------------
