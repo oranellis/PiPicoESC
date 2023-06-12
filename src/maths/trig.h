@@ -4,10 +4,6 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== defines.h ====
-//
-// All user defined constants used by the ESC
-//
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
