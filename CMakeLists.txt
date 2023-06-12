@@ -11,8 +11,7 @@
 
 cmake_minimum_required(VERSION 3.13)
 
-set(PICO_SDK_PATH $ENV{SDK_PATH}/pico-sdk)
-include(pico_sdk_import.cmake)
+include(pico-sdk/pico_sdk_init.cmake)
 
 project(PiPicoESC)
 
@@ -25,7 +24,7 @@ pico_sdk_init()
 add_executable(esc)
 add_subdirectory(src)
 
-target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src /usr/arm-none-eabi/include)
+target_include_directories(esc PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(esc pico_stdlib hardware_gpio hardware_pwm pico_multicore pico_stdio_uart)
 
 pico_add_extra_outputs(esc)

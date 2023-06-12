@@ -4,32 +4,63 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== main.cpp ====
-//
 // The program entrypoint
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "defines.h"
-#include "control_logic/motor_command.h"
-#include "motor_drive/gatedriver_io.h"
-#include "motor_drive/foc.h"
-#include "uart_io/uart_io.h"
+#define DEBUG
+
+#include "loops.h"
+
+#include "pico/time.h"
 
 int main() {
 
-    // Class initialisation
-    MotorCommand* motor_command_ptr = new MotorCommand();
-    Foc* foc_ptr = new Foc(motor_command_ptr);
-    UartIo* uart_io_ptr = new UartIo();
+    int errorcode = 0;
+    int counter100hz = 0;
+    int counter10hz = 0;
+    unsigned long long loop_start_us = 0;
+    unsigned long loop_period_us = 0;
 
-    // TODO the logic
-    foc_ptr->GetGatedriverIoPtr()->SetLedState(true);
+    while (errorcode & 0) {
 
-    // Cleanup
-    delete foc_ptr;
+        loop_start_us = time_us_64();
 
-    return 0;
+        Loop4khz();
+
+        if (counter100hz >= 40) {
+
+            Loop100hz();
+            counter100hz = 0;
+
+            if (counter10hz >= 10) {
+
+                Loop10hz();
+                counter10hz = 0;
+
+                loop_period_us = time_us_64() - loop_start_us;
+
+            }
+
+            else {
+
+                counter10hz++;
+
+            }
+
+        }
+
+        else {
+
+            counter100hz++;
+
+        }
+
+        busy_wait_until(loop_start_us + 250); // 4kHz looptime
+
+    }
+
+    return errorcode;
 
 }
