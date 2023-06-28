@@ -4,21 +4,11 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== defines.h ====
+// ==== safety.cpp ====
 //
-// Header containing all user defined constants for use by the ESC
+// Contains check functions to ensure the ESC is functioning properly
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
-
-#include "boards/pico.h"
-
-#define PIN_A_HIGH 5
-#define PIN_B_HIGH 4
-#define PIN_C_HIGH 3
-#define PIN_A_LOW 2
-#define PIN_B_LOW 1
-#define PIN_C_LOW 0
-#define LED_PIN PICO_DEFAULT_LED_PIN
+#include "motor_drive/safety.h"

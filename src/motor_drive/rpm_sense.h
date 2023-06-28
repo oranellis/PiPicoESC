@@ -4,32 +4,16 @@
 // |  __/| |  __/| | (_| (_) | |___ ___) | |___
 // |_|   |_|_|   |_|\___\___/|_____|____/ \____|
 //
-// ==== types.hpp ====
+// ==== rpm_sense.h ====
 //
-// Header file containing all commonly used types
+// Rpm sensing header file
 //
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
+class RpmSensors {
 
-enum class States {
-    kFault,
-    kInit,
-    kReady,
-    kRegen,
-    kCharging,
-    kIdle,
-    kPower,
-    kTest
-};
+    public:
 
-
-enum class DriveModes {
-    kPark,
-    kReverse,
-    kNeutral,
-    kEco,
-    kDrive,
-    kSpeeeeeed,
+    int GetMilliRadiansPerSecond();
 };
