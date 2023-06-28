@@ -9,12 +9,15 @@
 
 #pragma once
 
-#include "limits.h"
-#include "peripherals/throttle.h"
-#include "peripherals/reverse.h"
-#include "peripherals/current.h"
-#include "peripherals/voltage.h"
+#define N_MODULES 3
+#define CELLS_PER_MODULE 12
 
-void Loop4khz();
+struct limits {
 
-void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr);
+    constexpr static float cell_v_min = 3.4;
+    constexpr static float cell_v_max = 3.75;
+
+    constexpr static float v_hv_min = 122.4;
+    constexpr static float v_hv_max = 135.0;
+
+};

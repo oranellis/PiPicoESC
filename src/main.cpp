@@ -9,8 +9,6 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#define DEBUG
-
 #include "loops.h"
 
 #include "pico/time.h"
@@ -19,11 +17,15 @@ int main() {
 
     int errorcode = 0;
     int counter100hz = 0;
-    int counter10hz = 0;
     unsigned long long loop_start_us = 0;
     unsigned long loop_period_us = 0;
 
-    while (errorcode & 0) {
+    float throttle = 0;
+    bool reverse = false;
+    bool charging = false;
+
+
+    while (!errorcode) {
 
         loop_start_us = time_us_64();
 
@@ -31,23 +33,10 @@ int main() {
 
         if (counter100hz >= 40) {
 
-            Loop100hz();
+            Loop100hz(&throttle, &reverse, &charging, &errorcode);
             counter100hz = 0;
 
-            if (counter10hz >= 10) {
-
-                Loop10hz();
-                counter10hz = 0;
-
-                loop_period_us = time_us_64() - loop_start_us;
-
-            }
-
-            else {
-
-                counter10hz++;
-
-            }
+            loop_period_us = time_us_64() - loop_start_us;
 
         }
 

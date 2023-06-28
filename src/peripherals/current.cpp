@@ -7,14 +7,22 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
+#include "current.h"
 
-#include "limits.h"
-#include "peripherals/throttle.h"
-#include "peripherals/reverse.h"
-#include "peripherals/current.h"
-#include "peripherals/voltage.h"
+float GetACurrent() {
 
-void Loop4khz();
+	return 0.0;
 
-void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr);
+}
+
+float GetBCurrent() {
+
+	return 0.0;
+
+}
+
+float GetCCurrent() {
+
+	return 0.0;
+
+}

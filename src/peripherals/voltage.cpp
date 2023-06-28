@@ -7,14 +7,32 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
+#include "voltage.h"
 
-#include "limits.h"
-#include "peripherals/throttle.h"
-#include "peripherals/reverse.h"
-#include "peripherals/current.h"
-#include "peripherals/voltage.h"
+float GetAVoltage() {
 
-void Loop4khz();
+    return 0.0;
 
-void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr);
+}
+
+float GetBVoltage() {
+
+    return 0.0;
+
+}
+
+float GetCVoltage() {
+
+    return 0.0;
+
+}
+
+float GetHvVoltage() {
+
+    return 400.0;
+
+}
+
+float GetLvVoltage() {
+
+}

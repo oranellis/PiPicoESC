@@ -9,8 +9,42 @@
 
 #include "loops.h"
 
-void Loop4khz();
+void Loop4khz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr) {
 
-void Loop100hz();
+    // read sensors for required values
 
-void Loop10hz();
+    float i_a = GetACurrent();
+    float i_b = GetBCurrent();
+    float i_c = GetCCurrent();
+
+    float v_a = GetAVoltage();
+    float v_b = GetBVoltage();
+    float v_c = GetCVoltage();
+
+    float v_hv = GetHvVoltage();
+    float v_lv = GetLvVoltage();
+
+    // Safety checks
+
+    if (v_hv < limits::v_hv_min || v_hv > limits::v_hv_max) {
+
+        *errorcode_ptr = 1;
+        return;
+
+    }
+
+    // Phase control calculations
+
+}
+
+void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr) {
+
+    *throttle_ptr = GetThrottle();
+
+    *reverse_ptr = GetReverse();
+
+    *charging_ptr = false;
+
+    *errorcode_ptr = 0;
+
+}

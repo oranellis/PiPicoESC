@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "limits.h"
-#include "peripherals/throttle.h"
-#include "peripherals/reverse.h"
-#include "peripherals/current.h"
-#include "peripherals/voltage.h"
+float GetAVoltage();
 
-void Loop4khz();
+float GetBVoltage();
 
-void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr);
+float GetCVoltage();
+
+float GetHvVoltage();
+
+float GetLvVoltage();
