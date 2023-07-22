@@ -7,17 +7,11 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
+#include "hv_battery.h"
 
-#define N_MODULES 3
-#define CELLS_PER_MODULE 12
+float HvBattery::cell_v_min = 3.4;
+float HvBattery::cell_v_max = 3.75;
 
-struct limits {
+float HvBattery::v_min = 122.4;
+float HvBattery::v_max = 135.0;
 
-    constexpr static float cell_v_min = 3.4;
-    constexpr static float cell_v_max = 3.75;
-
-    constexpr static float v_hv_min = 122.4;
-    constexpr static float v_hv_max = 135.0;
-
-};

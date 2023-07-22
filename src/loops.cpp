@@ -9,42 +9,36 @@
 
 #include "loops.h"
 
-void Loop4khz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr) {
+void DriveLoop(int* error_code_ptr) {
 
-    // read sensors for required values
+	// read sensors for required values
 
-    float i_a = GetACurrent();
-    float i_b = GetBCurrent();
-    float i_c = GetCCurrent();
+	float i_a = GetACurrent();
+	float i_b = GetBCurrent();
+	float i_c = GetCCurrent();
 
-    float v_a = GetAVoltage();
-    float v_b = GetBVoltage();
-    float v_c = GetCVoltage();
+	float v_a = GetAVoltage();
+	float v_b = GetBVoltage();
+	float v_c = GetCVoltage();
 
-    float v_hv = GetHvVoltage();
-    float v_lv = GetLvVoltage();
+	float v_hv = GetHvVoltage();
+	float v_lv = GetLvVoltage();
 
-    // Safety checks
+	// Safety checks
 
-    if (v_hv < limits::v_hv_min || v_hv > limits::v_hv_max) {
+	if (v_hv < HvBattery::v_min || v_hv > HvBattery::v_max) {
 
-        *errorcode_ptr = 1;
-        return;
+		*error_code_ptr = 1;
+		return;
 
-    }
+	}
 
-    // Phase control calculations
+	// Phase control calculations
 
 }
 
-void Loop100hz(float* throttle_ptr, bool* reverse_ptr, bool* charging_ptr, int* errorcode_ptr) {
+void ChargeLoop(int* error_code_ptr) {
 
-    *throttle_ptr = GetThrottle();
-
-    *reverse_ptr = GetReverse();
-
-    *charging_ptr = false;
-
-    *errorcode_ptr = 0;
+	return;
 
 }
