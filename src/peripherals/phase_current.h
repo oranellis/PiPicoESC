@@ -7,32 +7,16 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "voltage.h"
+#pragma once
 
-float GetAVoltage() {
+class PhaseCurrent {
 
-	return 0.0;
+	public:
 
-}
+	static float GetA();
 
-float GetBVoltage() {
+	static float GetB();
 
-	return 0.0;
+	static float GetC();
 
-}
-
-float GetCVoltage() {
-
-	return 0.0;
-
-}
-
-float GetHvVoltage() {
-
-	return 400.0;
-
-}
-
-float GetLvVoltage() {
-
-}
+};

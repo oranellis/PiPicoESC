@@ -12,12 +12,14 @@
 #define N_MODULES 3
 #define CELLS_PER_MODULE 12
 
-struct HvBattery {
+struct HvInput {
 
 	static float cell_v_min;
 	static float cell_v_max;
 
 	static float v_min;
 	static float v_max;
+
+	static float GetVoltage();
 
 };

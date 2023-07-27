@@ -7,14 +7,16 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#pragma once
+#include "hv_input.h"
 
-float GetAVoltage();
+float HvInput::cell_v_min = 3.4;
+float HvInput::cell_v_max = 3.75;
 
-float GetBVoltage();
+float HvInput::v_min = 122.4;
+float HvInput::v_max = 135.0;
 
-float GetCVoltage();
+float HvInput::GetVoltage() {
 
-float GetHvVoltage();
+	return 0.0;
 
-float GetLvVoltage();
+}

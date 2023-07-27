@@ -9,8 +9,14 @@
 
 #pragma once
 
-float GetACurrent();
+class PhaseVoltage {
 
-float GetBCurrent();
+	public:
 
-float GetCCurrent();
+	static float GetA();
+
+	static float GetB();
+
+	static float GetC();
+
+};

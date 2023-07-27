@@ -11,9 +11,14 @@
 
 #include "peripherals/throttle.h"
 #include "peripherals/reverse.h"
-#include "peripherals/current.h"
-#include "peripherals/voltage.h"
-#include "peripherals/hv_battery.h"
+#include "peripherals/phase_current.h"
+#include "peripherals/phase_voltage.h"
+#include "peripherals/hv_input.h"
+#include "peripherals/motor_rotation.h"
+
+#define inv_sqrt_2 0.707107
+#define inv_sqrt_3 0.577350
+#define inv_sqrt_6 0.408248
 
 void DriveLoop(int* error_code_ptr);
 

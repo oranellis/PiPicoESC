@@ -7,11 +7,10 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "hv_battery.h"
+#include "motor_rotation.h"
 
-float HvBattery::cell_v_min = 3.4;
-float HvBattery::cell_v_max = 3.75;
+float MotorRotation::GetVel() {
 
-float HvBattery::v_min = 122.4;
-float HvBattery::v_max = 135.0;
+	return 0.0;
 
+}

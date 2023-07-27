@@ -7,22 +7,10 @@
 // Authors: Oran Ellis, Karl Hartmann
 // Licence: GPLv3
 
-#include "current.h"
+class MotorRotation {
 
-float GetACurrent() {
+	public:
 
-	return 0.0;
+	static float GetVel();
 
-}
-
-float GetBCurrent() {
-
-	return 0.0;
-
-}
-
-float GetCCurrent() {
-
-	return 0.0;
-
-}
+};
